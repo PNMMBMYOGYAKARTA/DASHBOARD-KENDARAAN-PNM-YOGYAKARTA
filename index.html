@@ -265,6 +265,19 @@
 
     </main>
 
+    <!-- Modal Image Preview (Semi Full Screen) -->
+    <div id="image-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-[100] hidden flex flex-col items-center justify-center p-4 transition-all" onclick="closeImageModal()">
+        <div class="relative max-w-4xl max-h-[90vh] w-full flex flex-col items-center justify-center" onclick="event.stopPropagation()">
+            <button onclick="closeImageModal()" class="absolute -top-12 right-0 text-white bg-slate-800/80 hover:bg-slate-700 p-2.5 rounded-full w-10 h-10 flex items-center justify-center shadow-lg transition-all cursor-pointer">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <img id="modal-img-preview" src="" alt="Gambar Perbesar" class="max-w-full max-h-[80vh] object-contain rounded-xl shadow-2xl border border-white/20">
+            <a id="modal-download-link" href="#" target="_blank" class="mt-4 inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-md transition-all">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Gambar Asli
+            </a>
+        </div>
+    </div>
+
     <footer class="bg-white border-t border-slate-200 mt-12 py-6 text-center text-xs font-medium text-slate-400">
         &copy; 2026 PNM Yogyakarta &bull; Dashboard Kendaraan Interaktif
     </footer>
@@ -275,6 +288,15 @@
         let rawDetailData = [];
         let mapsMap = {}; 
         let loadedSheets = 0;
+
+        // Label Default Kolom Tambahan (Kolom M, N, O, P, Q)
+        const additionalHeaders = [
+            "TANGGAL PRESENSI",
+            "KILOMETER",
+            "TAMPAK DEPAN",
+            "TAMPAK BELAKANG",
+            "STNK"
+        ];
 
         function fetchSheetDataJSONP(sheetName, callbackName) {
             const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=responseHandler:${callbackName}&sheet=${encodeURIComponent(sheetName)}`;
@@ -310,6 +332,7 @@
             const headerRow = document.getElementById('table-headers');
             headerRow.innerHTML = '';
             
+            // Kolom A-K (0 - 10)
             const columnsToDisplay = cols.slice(0, 11);
             columnsToDisplay.forEach((col, idx) => {
                 const th = document.createElement('th');
@@ -318,10 +341,18 @@
                 headerRow.appendChild(th);
             });
 
+            // Kolom M-Q (12 - 16)
+            additionalHeaders.forEach((title, idx) => {
+                const th = document.createElement('th');
+                th.className = 'px-6 py-4';
+                th.textContent = (cols[12 + idx] && cols[12 + idx].label) ? cols[12 + idx].label : title;
+                headerRow.appendChild(th);
+            });
+
             rawDetailData = rows.map(row => {
                 const rowData = [];
-                for(let i=0; i<12; i++) {
-                    const cell = row.c[i];
+                for(let i=0; i<17; i++) {
+                    const cell = row.c ? row.c[i] : null;
                     rowData.push(cell ? (cell.f || cell.v || '') : '');
                 }
                 return rowData;
@@ -363,6 +394,37 @@
             resizeObserver.observe(mainTableContainer);
         }
 
+        // Fungsi Helper Mengubah URL Drive ke URL Direct Preview
+        function formatImageUrl(url) {
+            if (!url) return '';
+            let strUrl = url.toString().trim();
+            if (strUrl.includes('drive.google.com') || strUrl.includes('docs.google.com')) {
+                let match = strUrl.match(/[-\w]{25,}/);
+                if (match) {
+                    return `https://drive.google.com/thumbnail?id=${match[0]}&sz=w800`;
+                }
+            }
+            return strUrl;
+        }
+
+        // Modal Zoom Function
+        function openImageModal(imgUrl) {
+            if (!imgUrl) return;
+            const modal = document.getElementById('image-modal');
+            const modalImg = document.getElementById('modal-img-preview');
+            const downloadLink = document.getElementById('modal-download-link');
+            
+            modalImg.src = imgUrl;
+            downloadLink.href = imgUrl;
+            modal.classList.remove('hidden');
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('image-modal');
+            modal.classList.add('hidden');
+            document.getElementById('modal-img-preview').src = '';
+        }
+
         function filterAndRender() {
             const selectedUnit = document.getElementById('filter-unit').value;
             const searchNopol = document.getElementById('filter-nopol').value.trim().toLowerCase();
@@ -394,11 +456,11 @@
             let filtered = rawDetailData;
 
             if (selectedUnit) {
-                filtered = filtered.filter(row => row[1].toString().trim().toLowerCase() === selectedUnit.toLowerCase());
+                filtered = filtered.filter(row => row[1] && row[1].toString().trim().toLowerCase() === selectedUnit.toLowerCase());
             }
 
             if (searchNopol) {
-                filtered = filtered.filter(row => row[2].toString().trim().toLowerCase().includes(searchNopol));
+                filtered = filtered.filter(row => row[2] && row[2].toString().trim().toLowerCase().includes(searchNopol));
             }
 
             let motorCount = 0, mobilCount = 0;
@@ -418,9 +480,9 @@
                     }
                 }
 
-                const colD = row[3].toString().toUpperCase();
-                const colK = row[10].toString().toUpperCase(); 
-                const colL = row[11].toString().toUpperCase(); 
+                const colD = row[3] ? row[3].toString().toUpperCase() : '';
+                const colK = row[10] ? row[10].toString().toUpperCase() : ''; 
+                const colL = row[11] ? row[11].toString().toUpperCase() : ''; 
 
                 let isMotor = colL.includes('MOTOR') || colD.includes('BEAT') || colD.includes('VARIO') || colD.includes('REVO');
                 let isMobil = colL.includes('MOBIL') || colD.includes('AVANZA') || colD.includes('INNOVA');
@@ -489,6 +551,7 @@
                     const tr = document.createElement('tr');
                     tr.className = 'hover:bg-slate-50/80 transition-colors border-b border-slate-100';
                     
+                    // Render Kolom A s.d. K (Index 0 s.d. 10)
                     for(let i = 0; i < 11; i++) {
                         const td = document.createElement('td');
                         td.className = 'px-6 py-4 whitespace-nowrap text-slate-700';
@@ -500,6 +563,39 @@
                         }
                         tr.appendChild(td);
                     }
+
+                    // Render Kolom M s.d. Q (Index 12 s.d. 16)
+                    // Index 12: TANGGAL PRESENSI (Kolom M)
+                    const tdM = document.createElement('td');
+                    tdM.className = 'px-6 py-4 whitespace-nowrap text-slate-700';
+                    tdM.textContent = row[12] ? row[12].toString() : '-';
+                    tr.appendChild(tdM);
+
+                    // Index 13: KILOMETER (Kolom N)
+                    const tdN = document.createElement('td');
+                    tdN.className = 'px-6 py-4 whitespace-nowrap text-slate-700 font-mono';
+                    tdN.textContent = row[13] ? row[13].toString() : '-';
+                    tr.appendChild(tdN);
+
+                    // Index 14-16: TAMPAK DEPAN, TAMPAK BELAKANG, STNK (Kolom O, P, Q)
+                    for (let imgIdx = 14; imgIdx <= 16; imgIdx++) {
+                        const tdImg = document.createElement('td');
+                        tdImg.className = 'px-6 py-4 whitespace-nowrap';
+                        const rawUrl = row[imgIdx] ? row[imgIdx].toString().trim() : '';
+                        
+                        if (rawUrl && (rawUrl.startsWith('http://') || rawUrl.startsWith('https://'))) {
+                            const formattedUrl = formatImageUrl(rawUrl);
+                            tdImg.innerHTML = `
+                                <div class="w-14 h-14 rounded-lg overflow-hidden border border-slate-200 shadow-sm bg-slate-100 cursor-pointer hover:opacity-80 transition-all hover:scale-105 transform" onclick="openImageModal('${formattedUrl}')">
+                                    <img src="${formattedUrl}" alt="Preview" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-[10px] text-slate-400 p-1 block text-center\\'>Gambar Error</span>';">
+                                </div>
+                            `;
+                        } else {
+                            tdImg.innerHTML = `<span class="text-xs text-slate-400 italic">-</span>`;
+                        }
+                        tr.appendChild(tdImg);
+                    }
+
                     tbody.appendChild(tr);
                 });
             }
