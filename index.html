@@ -19,21 +19,15 @@
             background-color: #f1f5f9;
         }
         
-        /* Custom Brand Color Definitions */
         :root {
             --pnm-blue-dark: #003B73;
             --pnm-blue: #0056B3;
             --pnm-cyan: #00A3E0;
             --pnm-green: #00A859;
-            --pnm-green-light: #25D366;
         }
 
         .bg-pnm-gradient {
             background: linear-gradient(135deg, #002B5B 0%, #0056B3 50%, #00A859 100%);
-        }
-
-        .bg-card-gradient {
-            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.9) 100%);
         }
 
         /* Custom Scrollbar */
@@ -53,35 +47,31 @@
             background: #64748b;
         }
 
-        /* License Plate styling */
         .plate-tag {
             font-family: 'Courier New', Courier, monospace;
             letter-spacing: 1px;
             box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
         }
 
-        /* Pulse animation for active indicator */
-        @keyframes pulse-ring {
-            0% { transform: scale(0.95); opacity: 0.8; }
-            50% { transform: scale(1.05); opacity: 1; }
-            100% { transform: scale(0.95); opacity: 0.8; }
-        }
-        .pulse-indicator {
-            animation: pulse-ring 2s infinite ease-in-out;
+        .tab-btn.active {
+            background-color: #ffffff;
+            color: #0056B3;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            font-weight: 800;
         }
     </style>
 </head>
 <body class="text-slate-800 antialiased min-h-screen flex flex-col selection:bg-blue-500 selection:text-white">
 
     <!-- Top Header Navigation -->
-    <header class="bg-pnm-gradient text-white shadow-lg sticky top-0 z-50 transition-all">
+    <header class="bg-pnm-gradient text-white shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 
-                <!-- Logo & Title Section -->
+                <!-- Logo & Title Section (Logo Bebas Tanpa Terbatas Kotak) -->
                 <div class="flex items-center gap-3.5">
-                    <div class="bg-white/10 backdrop-blur-md p-2.5 rounded-2xl border border-white/20 shadow-inner flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-car-side text-2xl text-cyan-300"></i>
+                    <div class="shrink-0 flex items-center justify-center">
+                        <img id="app-logo-img" src="" alt="Logo PNM" class="h-12 w-auto object-contain transition-all hover:scale-105">
                     </div>
                     <div>
                         <div class="flex items-center gap-2">
@@ -92,9 +82,9 @@
                     </div>
                 </div>
 
-                <!-- Contact & Operator Info (WhatsApp Button) -->
+                <!-- Contact Operator (WhatsApp) -->
                 <div class="flex items-center gap-3 self-end md:self-auto">
-                    <a href="https://wa.me/6285643782103" target="_blank" rel="noopener font-medium"
+                    <a href="https://wa.me/6285643782103" target="_blank" rel="noopener"
                        class="group flex items-center gap-3 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white px-4 py-2 rounded-full shadow-lg shadow-emerald-900/20 border border-emerald-400/40 transition-all duration-300">
                         <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white group-hover:scale-110 transition-transform">
                             <i class="fa-brands fa-whatsapp text-lg"></i>
@@ -108,311 +98,443 @@
                 </div>
 
             </div>
+
+            <!-- Tab Navigation Control Bar -->
+            <div class="mt-4 pt-3 border-t border-white/10 flex items-center gap-2 overflow-x-auto custom-scrollbar">
+                <button onclick="switchTab('tab1')" id="btn-tab1" class="tab-btn active px-5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 text-white hover:bg-white/10 shrink-0 cursor-pointer">
+                    <i class="fa-solid fa-car"></i> DATA KENDARAAN
+                </button>
+                <button onclick="switchTab('tab2')" id="btn-tab2" class="tab-btn px-5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 text-white hover:bg-white/10 shrink-0 cursor-pointer">
+                    <i class="fa-solid fa-triangle-exclamation"></i> PENGADUAN
+                </button>
+                <button onclick="switchTab('tab3')" id="btn-tab3" class="tab-btn px-5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 text-white hover:bg-white/10 shrink-0 cursor-pointer">
+                    <i class="fa-solid fa-chart-line"></i> MONITORING
+                </button>
+            </div>
+
         </div>
     </header>
 
-    <!-- Main Dashboard Container -->
+    <!-- Main Content Area -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 flex-grow w-full">
 
-        <!-- Loading Overlay -->
+        <!-- Global Loading Overlay -->
         <div id="loading" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] flex flex-col items-center justify-center text-white gap-4 transition-all">
             <div class="relative flex items-center justify-center">
                 <div class="w-16 h-16 border-4 border-emerald-400/30 border-t-emerald-400 rounded-full animate-spin"></div>
                 <i class="fa-solid fa-shield-halved absolute text-emerald-400 text-lg"></i>
             </div>
             <div class="text-center">
-                <p class="font-bold text-lg tracking-wide">Memuat Data Kendaraan...</p>
-                <p class="text-xs text-slate-300 font-medium mt-1">Mengambil data realtime dari server PNM</p>
+                <p class="font-bold text-lg tracking-wide">Memuat Data Dashboard...</p>
+                <p class="text-xs text-slate-300 font-medium mt-1">Mengambil data realtime dari Google Sheets</p>
             </div>
         </div>
 
-        <!-- Filter Control Section & Location Link Card -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <!-- ================= TAB 1: DATA KENDARAAN ================= -->
+        <div id="content-tab1" class="space-y-6">
             
-            <!-- Filters Card -->
-            <div class="lg:col-span-2 bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all space-y-4">
-                <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center font-bold">
-                            <i class="fa-solid fa-sliders text-sm"></i>
+            <!-- Filter & Quick Link Maps -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                <div class="lg:col-span-2 bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all space-y-4">
+                    <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-sliders text-sm"></i>
+                            </div>
+                            <div>
+                                <h2 class="font-bold text-slate-900 text-sm">Filter & Search Data</h2>
+                                <p class="text-[11px] text-slate-400 font-medium">Saring data kendaraan berdasarkan NOPOL atau Unit Kerja</p>
+                            </div>
                         </div>
-                        <div>
-                            <h2 class="font-bold text-slate-900 text-sm">Filter & Search Data</h2>
-                            <p class="text-[11px] text-slate-400 font-medium">Saring data kendaraan berdasarkan NOPOL atau Unit Kerja</p>
+                        <button onclick="resetFiltersTab1()" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50">
+                            <i class="fa-solid fa-rotate-left text-[10px]"></i> Reset
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <label for="filter-nopol" class="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-id-card text-blue-600"></i> Nomor Polisi (NOPOL)
+                            </label>
+                            <div class="relative">
+                                <input type="text" id="filter-nopol" placeholder="Contoh: AB 1234 XX..." 
+                                    class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm font-semibold rounded-xl px-4 py-2.5 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all placeholder:text-slate-400 placeholder:font-normal">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label for="filter-unit" class="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-building-user text-emerald-600"></i> Unit Kerja / Kantor
+                            </label>
+                            <div class="relative">
+                                <select id="filter-unit" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm font-semibold rounded-xl px-4 py-2.5 pl-10 appearance-none focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all cursor-pointer">
+                                    <option value="">-- Semua Asset / Seluruh Unit --</option>
+                                </select>
+                                <i class="fa-solid fa-location-dot absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                                <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
+                            </div>
                         </div>
                     </div>
-                    <button onclick="resetFilters()" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50">
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+                            <div class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-map-location-dot text-sm"></i>
+                            </div>
+                            <div>
+                                <h2 class="font-bold text-slate-900 text-sm">Informasi Lokasi Unit</h2>
+                                <p class="text-[11px] text-slate-400 font-medium">Navigasi Google Maps</p>
+                            </div>
+                        </div>
+                        
+                        <div class="py-3.5">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Unit Kerja Terpilih</p>
+                            <p id="selected-unit-name" class="font-extrabold text-slate-900 text-base mt-0.5 line-clamp-1">-</p>
+                        </div>
+                    </div>
+
+                    <div id="maps-btn-container">
+                        <div class="text-center text-xs text-slate-400 bg-slate-50 py-2.5 px-3 rounded-xl border border-dashed border-slate-200 font-medium flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-circle-info text-slate-400"></i> Pilih Unit Kerja untuk link lokasi
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resume Metric Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
+                    <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-blue-500/5 rounded-full group-hover:scale-125 transition-transform"></div>
+                    <div>
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">Wilayah Operasional</span>
+                                <h3 id="resume-area" class="text-xl font-extrabold text-slate-900 mt-2">PNM YOGYAKARTA</h3>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 text-white flex items-center justify-center text-lg shadow-md shadow-blue-500/20">
+                                <i class="fa-solid fa-map-location"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="sub-block-area" class="hidden border-t border-slate-100 pt-3 mt-4">
+                        <div class="bg-slate-50 border border-slate-100 p-2.5 rounded-xl flex items-center justify-between">
+                            <div>
+                                <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">AREA KERJA</p>
+                                <p id="text-sub-area" class="text-xs font-bold text-slate-800 mt-0.5 truncate max-w-[200px]">-</p>
+                            </div>
+                            <i class="fa-solid fa-building text-slate-300 text-sm"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
+                    <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-amber-500/5 rounded-full group-hover:scale-125 transition-transform"></div>
+                    <div>
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-100">Armada Roda Dua</span>
+                                <div class="flex items-baseline gap-2 mt-1">
+                                    <span id="resume-motor" class="text-3xl font-black text-slate-900">0</span>
+                                    <span class="text-xs font-bold text-slate-400">Unit Motor</span>
+                                </div>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 text-white flex items-center justify-center text-lg shadow-md shadow-amber-500/20">
+                                <i class="fa-solid fa-motorcycle"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 border-t border-slate-100 pt-3 mt-3">
+                        <div class="bg-emerald-50/70 border border-emerald-200/60 p-2.5 rounded-xl">
+                            <p class="text-[10px] font-extrabold text-emerald-700 uppercase tracking-wider">MASIH SEWA</p>
+                            <p id="motor-aktif" class="text-base font-extrabold text-emerald-800 mt-0.5">0</p>
+                        </div>
+                        <div class="bg-rose-50/70 border border-rose-200/60 p-2.5 rounded-xl">
+                            <p class="text-[10px] font-extrabold text-rose-700 uppercase tracking-wider">HABIS SEWA</p>
+                            <p id="motor-habis" class="text-base font-extrabold text-rose-800 mt-0.5">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
+                    <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-indigo-500/5 rounded-full group-hover:scale-125 transition-transform"></div>
+                    <div>
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">Armada Roda Empat</span>
+                                <div class="flex items-baseline gap-2 mt-1">
+                                    <span id="resume-mobil" class="text-3xl font-black text-slate-900">0</span>
+                                    <span class="text-xs font-bold text-slate-400">Unit Mobil</span>
+                                </div>
+                            </div>
+                            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-600 to-blue-700 text-white flex items-center justify-center text-lg shadow-md shadow-indigo-500/20">
+                                <i class="fa-solid fa-car"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 border-t border-slate-100 pt-3 mt-3">
+                        <div class="bg-emerald-50/70 border border-emerald-200/60 p-2.5 rounded-xl">
+                            <p class="text-[10px] font-extrabold text-emerald-700 uppercase tracking-wider">MASIH SEWA</p>
+                            <p id="mobil-aktif" class="text-base font-extrabold text-emerald-800 mt-0.5">0</p>
+                        </div>
+                        <div class="bg-rose-50/70 border border-rose-200/60 p-2.5 rounded-xl">
+                            <p class="text-[10px] font-extrabold text-rose-700 uppercase tracking-wider">HABIS SEWA</p>
+                            <p id="mobil-habis" class="text-base font-extrabold text-rose-800 mt-0.5">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Breakdown Tipe Kendaraan -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                        <p class="text-xs font-extrabold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-motorcycle text-amber-500"></i> Breakdown Tipe Motor
+                        </p>
+                        <span class="text-[10px] font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded">Roda 2</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="border border-slate-200/70 rounded-xl p-3 bg-slate-50/60 text-center">
+                            <p class="text-[10px] font-extrabold text-slate-400 tracking-wider">HONDA BEAT</p>
+                            <p id="type-beat" class="text-2xl font-black text-slate-800 mt-0.5">0</p>
+                        </div>
+                        <div class="border border-slate-200/70 rounded-xl p-3 bg-slate-50/60 text-center">
+                            <p class="text-[10px] font-extrabold text-slate-400 tracking-wider">HONDA VARIO</p>
+                            <p id="type-vario" class="text-2xl font-black text-slate-800 mt-0.5">0</p>
+                        </div>
+                        <div class="border border-slate-200/70 rounded-xl p-3 bg-slate-50/60 text-center">
+                            <p class="text-[10px] font-extrabold text-slate-400 tracking-wider">HONDA REVO</p>
+                            <p id="type-revo" class="text-2xl font-black text-slate-800 mt-0.5">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                        <p class="text-xs font-extrabold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-car-side text-indigo-600"></i> Breakdown Tipe Mobil
+                        </p>
+                        <span class="text-[10px] font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded">Roda 4</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="border border-slate-200/70 rounded-xl p-3 bg-slate-50/60 text-center">
+                            <p class="text-[10px] font-extrabold text-slate-400 tracking-wider">TOYOTA AVANZA</p>
+                            <p id="type-avanza" class="text-2xl font-black text-slate-800 mt-0.5">0</p>
+                        </div>
+                        <div class="border border-slate-200/70 rounded-xl p-3 bg-slate-50/60 text-center">
+                            <p class="text-[10px] font-extrabold text-slate-400 tracking-wider">TOYOTA INNOVA</p>
+                            <p id="type-innova" class="text-2xl font-black text-slate-800 mt-0.5">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabel Main Tab 1 -->
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-md overflow-hidden flex flex-col">
+                <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center font-bold shadow-md shadow-emerald-500/20">
+                            <i class="fa-solid fa-table-list text-sm"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-extrabold text-slate-900 text-base leading-snug">Detail Informasi Kendaraan Operasional</h2>
+                            <p class="text-xs text-slate-400 font-medium">Data realtime kendaraan berdasarkan filter</p>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold text-slate-600 bg-white border border-slate-200 px-3.5 py-1.5 rounded-full">
+                            Menampilkan <span id="filtered-count" class="text-blue-600 font-extrabold">0</span> dari <span id="total-count" class="font-extrabold text-slate-800">0</span> Data
+                        </span>
+                    </div>
+                </div>
+                
+                <div id="main-table-container" class="overflow-x-auto custom-scrollbar w-full min-h-[300px]">
+                    <table class="w-full text-left border-collapse min-w-max">
+                        <thead>
+                            <tr id="table-headers-tab1" class="bg-slate-900 text-white text-xs font-extrabold uppercase tracking-wider sticky top-0 z-10"></tr>
+                        </thead>
+                        <tbody id="table-body-tab1" class="divide-y divide-slate-100 text-sm font-medium text-slate-700"></tbody>
+                    </table>
+                </div>
+
+                <div id="empty-state-tab1" class="hidden py-16 flex flex-col items-center justify-center text-slate-400 gap-3">
+                    <i class="fa-regular fa-folder-open text-4xl text-slate-300"></i>
+                    <p class="font-bold text-slate-700 text-base">Tidak ada data yang sesuai</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================= TAB 2: PENGADUAN ================= -->
+        <div id="content-tab2" class="space-y-6 hidden">
+            
+            <!-- Resume Cards Pengaduan -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">TOTAL ADUAN</p>
+                        <h3 id="card-aduan-total" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] font-extrabold text-emerald-600 uppercase tracking-wider">STATUS DONE</p>
+                        <h3 id="card-aduan-done" class="text-3xl font-black text-emerald-600 mt-1">0</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] font-extrabold text-amber-600 uppercase tracking-wider">STATUS PROSES</p>
+                        <h3 id="card-aduan-proses" class="text-3xl font-black text-amber-600 mt-1">0</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters Pengaduan -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                    <h2 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-filter text-blue-600"></i> Filter List Pengaduan
+                    </h2>
+                    <button onclick="resetFiltersTab2()" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1 cursor-pointer">
                         <i class="fa-solid fa-rotate-left text-[10px]"></i> Reset
                     </button>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Filter NOPOL -->
-                    <div class="space-y-1.5">
-                        <label for="filter-nopol" class="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
-                            <i class="fa-solid fa-id-card text-blue-600"></i> Nomor Polisi (NOPOL)
-                        </label>
-                        <div class="relative">
-                            <input type="text" id="filter-nopol" placeholder="Contoh: AB 1234 XX..." 
-                                class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm font-semibold rounded-xl px-4 py-2.5 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all placeholder:text-slate-400 placeholder:font-normal">
-                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                        </div>
-                    </div>
-
-                    <!-- Dropdown Unit Kerja -->
-                    <div class="space-y-1.5">
-                        <label for="filter-unit" class="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
-                            <i class="fa-solid fa-building-user text-emerald-600"></i> Unit Kerja / Kantor
-                        </label>
-                        <div class="relative">
-                            <select id="filter-unit" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm font-semibold rounded-xl px-4 py-2.5 pl-10 appearance-none focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all cursor-pointer">
-                                <option value="">-- Semua Asset / Seluruh Unit --</option>
-                            </select>
-                            <i class="fa-solid fa-location-dot absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                            <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Maps / Location Quick Info Card -->
-            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
-                        <div class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center font-bold">
-                            <i class="fa-solid fa-map-location-dot text-sm"></i>
-                        </div>
-                        <div>
-                            <h2 class="font-bold text-slate-900 text-sm">Informasi Lokasi Unit</h2>
-                            <p class="text-[11px] text-slate-400 font-medium">Navigasi Google Maps</p>
-                        </div>
-                    </div>
-                    
-                    <div class="py-3.5">
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Unit Kerja Terpilih</p>
-                        <p id="selected-unit-name" class="font-extrabold text-slate-900 text-base mt-0.5 line-clamp-1">-</p>
-                    </div>
-                </div>
-
-                <div id="maps-btn-container">
-                    <div class="text-center text-xs text-slate-400 bg-slate-50 py-2.5 px-3 rounded-xl border border-dashed border-slate-200 font-medium flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-circle-info text-slate-400"></i> Pilih Unit Kerja untuk link lokasi
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Key Metrics & Counter Summary Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-            
-            <!-- Card 1: Area Info -->
-            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
-                <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-blue-500/5 rounded-full group-hover:scale-125 transition-transform"></div>
-                <div>
-                    <div class="flex items-start justify-between">
-                        <div>
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">Wilayah Operasional</span>
-                            <h3 id="resume-area" class="text-xl font-extrabold text-slate-900 mt-2">PNM YOGYAKARTA</h3>
-                        </div>
-                        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 text-white flex items-center justify-center text-lg shadow-md shadow-blue-500/20">
-                            <i class="fa-solid fa-map-location"></i>
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="sub-block-area" class="hidden border-t border-slate-100 pt-3 mt-4">
-                    <div class="bg-slate-50 border border-slate-100 p-2.5 rounded-xl flex items-center justify-between">
-                        <div>
-                            <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">AREA KERJA</p>
-                            <p id="text-sub-area" class="text-xs font-bold text-slate-800 mt-0.5 truncate max-w-[200px]">-</p>
-                        </div>
-                        <i class="fa-solid fa-building text-slate-300 text-sm"></i>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 2: Motor Fleet Stats -->
-            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
-                <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-amber-500/5 rounded-full group-hover:scale-125 transition-transform"></div>
-                <div>
-                    <div class="flex items-start justify-between">
-                        <div>
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-100">Armada Roda Dua</span>
-                            <div class="flex items-baseline gap-2 mt-1">
-                                <span id="resume-motor" class="text-3xl font-black text-slate-900">0</span>
-                                <span class="text-xs font-bold text-slate-400">Unit Motor</span>
-                            </div>
-                        </div>
-                        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 text-white flex items-center justify-center text-lg shadow-md shadow-amber-500/20">
-                            <i class="fa-solid fa-motorcycle"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-2 border-t border-slate-100 pt-3 mt-3">
-                    <div class="bg-emerald-50/70 border border-emerald-200/60 p-2.5 rounded-xl">
-                        <p class="text-[10px] font-extrabold text-emerald-700 uppercase tracking-wider">MASIH SEWA</p>
-                        <p id="motor-aktif" class="text-base font-extrabold text-emerald-800 mt-0.5">0</p>
-                    </div>
-                    <div class="bg-rose-50/70 border border-rose-200/60 p-2.5 rounded-xl">
-                        <p class="text-[10px] font-extrabold text-rose-700 uppercase tracking-wider">HABIS SEWA</p>
-                        <p id="motor-habis" class="text-base font-extrabold text-rose-800 mt-0.5">0</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 3: Mobil Fleet Stats -->
-            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
-                <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-indigo-500/5 rounded-full group-hover:scale-125 transition-transform"></div>
-                <div>
-                    <div class="flex items-start justify-between">
-                        <div>
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">Armada Roda Empat</span>
-                            <div class="flex items-baseline gap-2 mt-1">
-                                <span id="resume-mobil" class="text-3xl font-black text-slate-900">0</span>
-                                <span class="text-xs font-bold text-slate-400">Unit Mobil</span>
-                            </div>
-                        </div>
-                        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-600 to-blue-700 text-white flex items-center justify-center text-lg shadow-md shadow-indigo-500/20">
-                            <i class="fa-solid fa-car"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-2 border-t border-slate-100 pt-3 mt-3">
-                    <div class="bg-emerald-50/70 border border-emerald-200/60 p-2.5 rounded-xl">
-                        <p class="text-[10px] font-extrabold text-emerald-700 uppercase tracking-wider">MASIH SEWA</p>
-                        <p id="mobil-aktif" class="text-base font-extrabold text-emerald-800 mt-0.5">0</p>
-                    </div>
-                    <div class="bg-rose-50/70 border border-rose-200/60 p-2.5 rounded-xl">
-                        <p class="text-[10px] font-extrabold text-rose-700 uppercase tracking-wider">HABIS SEWA</p>
-                        <p id="mobil-habis" class="text-base font-extrabold text-rose-800 mt-0.5">0</p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Breakdown Tipe Kendaraan -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-            
-            <!-- Motor Type Breakdown -->
-            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all space-y-3">
-                <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
-                    <p class="text-xs font-extrabold text-slate-700 uppercase tracking-wider flex items-center gap-2">
-                        <i class="fa-solid fa-motorcycle text-amber-500"></i> Breakdown Tipe Motor
-                    </p>
-                    <span class="text-[10px] font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded">Roda 2</span>
-                </div>
-                <div class="grid grid-cols-3 gap-3">
-                    <div class="border border-slate-200/70 rounded-xl p-3 bg-slate-50/60 hover:bg-white hover:shadow-sm transition-all text-center">
-                        <p class="text-[10px] font-extrabold text-slate-400 tracking-wider">HONDA BEAT</p>
-                        <p id="type-beat" class="text-2xl font-black text-slate-800 mt-0.5">0</p>
-                    </div>
-                    <div class="border border-slate-200/70 rounded-xl p-3 bg-slate-50/60 hover:bg-white hover:shadow-sm transition-all text-center">
-                        <p class="text-[10px] font-extrabold text-slate-400 tracking-wider">HONDA VARIO</p>
-                        <p id="type-vario" class="text-2xl font-black text-slate-800 mt-0.5">0</p>
-                    </div>
-                    <div class="border border-slate-200/70 rounded-xl p-3 bg-slate-50/60 hover:bg-white hover:shadow-sm transition-all text-center">
-                        <p class="text-[10px] font-extrabold text-slate-400 tracking-wider">HONDA REVO</p>
-                        <p id="type-revo" class="text-2xl font-black text-slate-800 mt-0.5">0</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mobil Type Breakdown -->
-            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all space-y-3">
-                <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
-                    <p class="text-xs font-extrabold text-slate-700 uppercase tracking-wider flex items-center gap-2">
-                        <i class="fa-solid fa-car-side text-indigo-600"></i> Breakdown Tipe Mobil
-                    </p>
-                    <span class="text-[10px] font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded">Roda 4</span>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="border border-slate-200/70 rounded-xl p-3 bg-slate-50/60 hover:bg-white hover:shadow-sm transition-all text-center">
-                        <p class="text-[10px] font-extrabold text-slate-400 tracking-wider">TOYOTA AVANZA</p>
-                        <p id="type-avanza" class="text-2xl font-black text-slate-800 mt-0.5">0</p>
-                    </div>
-                    <div class="border border-slate-200/70 rounded-xl p-3 bg-slate-50/60 hover:bg-white hover:shadow-sm transition-all text-center">
-                        <p class="text-[10px] font-extrabold text-slate-400 tracking-wider">TOYOTA INNOVA</p>
-                        <p id="type-innova" class="text-2xl font-black text-slate-800 mt-0.5">0</p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Main Data Table Container -->
-        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-md overflow-hidden flex flex-col">
-            
-            <!-- Table Header Bar -->
-            <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center font-bold shadow-md shadow-emerald-500/20">
-                        <i class="fa-solid fa-table-list text-sm"></i>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="text-[11px] font-bold text-slate-500 uppercase">Mulai Tanggal</label>
+                        <input type="date" id="filter-aduan-start" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl px-3 py-2 mt-1">
                     </div>
                     <div>
-                        <h2 class="font-extrabold text-slate-900 text-base leading-snug">Detail Informasi Kendaraan Operasional</h2>
-                        <p class="text-xs text-slate-400 font-medium">Data realtime kendaraan berdasarkan filter</p>
+                        <label class="text-[11px] font-bold text-slate-500 uppercase">Sampai Tanggal</label>
+                        <input type="date" id="filter-aduan-end" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl px-3 py-2 mt-1">
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-bold text-slate-500 uppercase">Unit Kerja</label>
+                        <select id="filter-aduan-unit" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl px-3 py-2 mt-1">
+                            <option value="">-- Semua Unit --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-bold text-slate-500 uppercase">Progres / Status</label>
+                        <select id="filter-aduan-progres" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl px-3 py-2 mt-1">
+                            <option value="">-- Semua Status --</option>
+                            <option value="DONE">DONE</option>
+                            <option value="PROSES">PROSES</option>
+                        </select>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-xs font-bold text-slate-600 bg-white border border-slate-200 px-3.5 py-1.5 rounded-full shadow-xs">
-                        Menampilkan <span id="filtered-count" class="text-blue-600 font-extrabold">0</span> dari <span id="total-count" class="font-extrabold text-slate-800">0</span> Data
-                    </span>
-                </div>
             </div>
+
+            <!-- Tabel Pengaduan -->
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-md overflow-hidden">
+                <div class="p-4 border-b border-slate-100 bg-slate-50/50">
+                    <h2 class="font-extrabold text-slate-900 text-sm">DAFTAR LIST PENGADUAN</h2>
+                </div>
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left border-collapse min-w-max">
+                        <thead>
+                            <tr class="bg-slate-900 text-white text-xs font-extrabold uppercase tracking-wider">
+                                <th class="px-4 py-3">TANGGAL</th>
+                                <th class="px-4 py-3">UNIT</th>
+                                <th class="px-4 py-3">NOPOL</th>
+                                <th class="px-4 py-3 max-w-xs md:max-w-sm lg:max-w-md">URAIAN ADUAN</th>
+                                <th class="px-4 py-3">FILE MEMO</th>
+                                <th class="px-4 py-3">PROGRES</th>
+                                <th class="px-4 py-3">BUKTI SERVIS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body-tab2" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
+                    </table>
+                </div>
+                <div id="empty-state-tab2" class="hidden py-12 text-center text-slate-400 font-bold">Tidak ada data pengaduan yang sesuai filter</div>
+            </div>
+
+        </div>
+
+        <!-- ================= TAB 3: MONITORING ================= -->
+        <div id="content-tab3" class="space-y-6 hidden">
             
-            <!-- Double Horizontal Scrollbar Helper -->
-            <div class="w-full bg-slate-100/80 border-b border-slate-200/60 px-4 py-2 flex items-center gap-3">
-                <p class="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider shrink-0 flex items-center gap-1.5">
-                    <i class="fa-solid fa-arrows-left-right text-blue-600"></i> Geser Tabel:
-                </p>
-                <div id="top-scrollbar-container" class="overflow-x-auto custom-scrollbar w-full">
-                    <div id="top-scrollbar-spacer" class="h-1"></div>
+            <!-- Filters Monitoring -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                    <h2 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-filter text-emerald-600"></i> Filter Data Monitoring
+                    </h2>
+                    <button onclick="resetFiltersTab3()" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1 cursor-pointer">
+                        <i class="fa-solid fa-rotate-left text-[10px]"></i> Reset
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="text-[11px] font-bold text-slate-500 uppercase">Mulai Tanggal</label>
+                        <input type="date" id="filter-mon-start" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl px-3 py-2 mt-1">
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-bold text-slate-500 uppercase">Sampai Tanggal</label>
+                        <input type="date" id="filter-mon-end" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl px-3 py-2 mt-1">
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-bold text-slate-500 uppercase">Unit Kerja</label>
+                        <select id="filter-mon-unit" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl px-3 py-2 mt-1">
+                            <option value="">-- Semua Unit --</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
-            <!-- Table Scrollable Area -->
-            <div id="main-table-container" class="overflow-x-auto custom-scrollbar w-full min-h-[300px]">
-                <table class="w-full text-left border-collapse min-w-max">
-                    <thead>
-                        <tr id="table-headers" class="bg-slate-900 text-white text-xs font-extrabold uppercase tracking-wider sticky top-0 z-10 shadow-sm">
-                            <!-- Headers populated via JavaScript -->
-                        </tr>
-                    </thead>
-                    <tbody id="table-body" class="divide-y divide-slate-100 text-sm font-medium text-slate-700">
-                        <!-- Rows populated via JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Empty State -->
-            <div id="empty-state" class="hidden py-16 flex flex-col items-center justify-center text-slate-400 gap-3">
-                <div class="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-slate-300 text-2xl">
-                    <i class="fa-regular fa-folder-open"></i>
+            <!-- Tabel Monitoring -->
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-md overflow-hidden">
+                <div class="p-4 border-b border-slate-100 bg-slate-50/50">
+                    <h2 class="font-extrabold text-slate-900 text-sm">DATA MONITORING KENDARAAN</h2>
                 </div>
-                <div class="text-center">
-                    <p class="font-bold text-slate-700 text-base">Tidak ada data yang sesuai</p>
-                    <p class="text-xs text-slate-400 mt-0.5">Coba ubah kata kunci pencarian NOPOL atau pilih unit kerja lain</p>
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left border-collapse min-w-max">
+                        <thead>
+                            <tr class="bg-slate-900 text-white text-xs font-extrabold uppercase tracking-wider">
+                                <th class="px-4 py-3">TANGGAL</th>
+                                <th class="px-4 py-3">UNIT KERJA</th>
+                                <th class="px-4 py-3">AKTIVITAS</th>
+                                <th class="px-4 py-3">TEMUAN</th>
+                                <th class="px-4 py-3">PHOTO MONITORING</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body-tab3" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
+                    </table>
                 </div>
+                <div id="empty-state-tab3" class="hidden py-12 text-center text-slate-400 font-bold">Tidak ada data monitoring yang sesuai filter</div>
             </div>
 
         </div>
 
     </main>
 
-    <!-- Modal Image Preview (Semi Full Screen) -->
-    <div id="image-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[100] hidden flex flex-col items-center justify-center p-4 transition-all duration-300" onclick="closeImageModal()">
+    <!-- Modal Image Preview (Semi Fullscreen Zoom) -->
+    <div id="image-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[100] hidden flex flex-col items-center justify-center p-4 transition-all" onclick="closeImageModal()">
         <div class="relative max-w-4xl max-h-[90vh] w-full flex flex-col items-center justify-center" onclick="event.stopPropagation()">
-            <button onclick="closeImageModal()" class="absolute -top-12 right-0 text-white bg-white/10 hover:bg-white/20 p-2.5 rounded-full w-10 h-10 flex items-center justify-center backdrop-blur-md transition-all cursor-pointer">
+            <button onclick="closeImageModal()" class="absolute -top-12 right-0 text-white bg-white/10 hover:bg-white/20 p-2.5 rounded-full w-10 h-10 flex items-center justify-center transition-all cursor-pointer">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
             <div class="bg-slate-900/50 p-2 rounded-2xl border border-white/10 shadow-2xl overflow-hidden max-h-[80vh]">
-                <img id="modal-img-preview" src="" alt="Gambar Kendaraan Preview" class="max-w-full max-h-[75vh] object-contain rounded-xl">
+                <img id="modal-img-preview" src="" alt="Preview" class="max-w-full max-h-[75vh] object-contain rounded-xl">
             </div>
-            <a id="modal-download-link" href="#" target="_blank" rel="noopener" class="mt-4 inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2.5 rounded-full text-xs font-bold shadow-lg shadow-emerald-950/40 transition-all active:scale-95">
+            <a id="modal-download-link" href="#" target="_blank" rel="noopener" class="mt-4 inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2.5 rounded-full text-xs font-bold shadow-lg transition-all">
                 <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Gambar Ukuran Asli
             </a>
         </div>
@@ -422,27 +544,30 @@
     <footer class="bg-white border-t border-slate-200/80 mt-12 py-6 text-center text-xs font-semibold text-slate-400">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
             <p>&copy; 2026 PT Permodalan Nasional Madani (PNM) Cabang Yogyakarta.</p>
-            <p class="text-slate-400">Dashboard Kendaraan MBM &bull; Modern Operations System</p>
+            <p class="text-slate-400">Dashboard Kendaraan MBM &bull; Integrated Single Page System</p>
         </div>
     </footer>
 
     <script>
+        // CONFIGURATION
         const SPREADSHEET_ID = '1B2lsaLSqIsSzM1bcrTPBDMf9-bOvIOb05EHQz6uZGnE';
         
+        // ID Logo Google Drive Terbaru
+        const LOGO_DRIVE_ID = '1VY9jjCZfWFIDC8aRfPUpColIlF2oUqdM'; 
+
+        // Apply Logo URL
+        document.getElementById('app-logo-img').src = `https://drive.google.com/thumbnail?id=${LOGO_DRIVE_ID}&sz=w500`;
+
+        // GLOBAL DATA STORAGE
         let rawDetailData = [];
+        let rawPengaduanData = [];
+        let rawMonitoringData = [];
         let mapsMap = {}; 
         let loadedSheets = 0;
 
-        // Label Default Kolom Tambahan (Kolom M, N, O, P, Q)
-        const additionalHeaders = [
-            "TANGGAL PRESENSI",
-            "KILOMETER",
-            "TAMPAK DEPAN",
-            "TAMPAK BELAKANG",
-            "STNK"
-        ];
+        const additionalHeadersTab1 = ["TANGGAL PRESENSI", "KILOMETER", "TAMPAK DEPAN", "TAMPAK BELAKANG", "STNK"];
 
-        // Fetch JSONP Data dari Google Sheets
+        // Dynamic JSONP Fetcher
         function fetchSheetDataJSONP(sheetName, callbackName) {
             const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=responseHandler:${callbackName}&sheet=${encodeURIComponent(sheetName)}`;
             const script = document.createElement('script');
@@ -450,46 +575,49 @@
             document.body.appendChild(script);
         }
 
-        // Callback Operator Data
+        // --- CALLBACK 1: OPERATOR ---
         window.handleOperatorData = function(json) {
             const rows = json.table.rows;
-            const dropdown = document.getElementById('filter-unit');
+            const dropdown1 = document.getElementById('filter-unit');
+            const dropdown2 = document.getElementById('filter-aduan-unit');
+            const dropdown3 = document.getElementById('filter-mon-unit');
             
             rows.forEach(row => {
                 const unit = row.c[0] ? row.c[0].v : '';
                 const mapLink = row.c[1] ? row.c[1].v : '';
                 
                 if (unit && unit !== 'OPERATOR' && unit !== 'Unit') {
-                    mapsMap[unit.toString().trim().toLowerCase()] = mapLink;
+                    const unitName = unit.toString().trim();
+                    mapsMap[unitName.toLowerCase()] = mapLink;
                     
-                    const opt = document.createElement('option');
-                    opt.value = unit.toString().trim();
-                    opt.textContent = unit.toString().trim();
-                    dropdown.appendChild(opt);
+                    const opt1 = new Option(unitName, unitName);
+                    const opt2 = new Option(unitName, unitName);
+                    const opt3 = new Option(unitName, unitName);
+                    
+                    dropdown1.add(opt1);
+                    dropdown2.add(opt2);
+                    dropdown3.add(opt3);
                 }
             });
             checkLoadStatus();
         }
 
-        // Callback Detail Data
+        // --- CALLBACK 2: DETAIL (TAB 1) ---
         window.handleDetailData = function(json) {
             const cols = json.table.cols;
             const rows = json.table.rows;
 
-            const headerRow = document.getElementById('table-headers');
+            const headerRow = document.getElementById('table-headers-tab1');
             headerRow.innerHTML = '';
             
-            // Kolom A-K (0 - 10)
-            const columnsToDisplay = cols.slice(0, 11);
-            columnsToDisplay.forEach((col, idx) => {
+            cols.slice(0, 11).forEach((col, idx) => {
                 const th = document.createElement('th');
                 th.className = 'px-5 py-3.5 whitespace-nowrap font-extrabold';
                 th.textContent = col.label || `Kolom ${String.fromCharCode(65 + idx)}`;
                 headerRow.appendChild(th);
             });
 
-            // Kolom M-Q (12 - 16)
-            additionalHeaders.forEach((title, idx) => {
+            additionalHeadersTab1.forEach((title, idx) => {
                 const th = document.createElement('th');
                 th.className = 'px-5 py-3.5 whitespace-nowrap font-extrabold';
                 th.textContent = (cols[12 + idx] && cols[12 + idx].label) ? cols[12 + idx].label : title;
@@ -509,78 +637,110 @@
             checkLoadStatus();
         }
 
+        // --- CALLBACK 3: PENGADUAN (TAB 2) ---
+        window.handlePengaduanData = function(json) {
+            const rows = json.table.rows || [];
+            rawPengaduanData = rows.map(row => {
+                const getVal = (idx) => (row.c && row.c[idx]) ? (row.c[idx].f || row.c[idx].v || '') : '';
+                return {
+                    unit: getVal(1),       // B
+                    tanggal: getVal(2),    // C
+                    nopol: getVal(4),      // E
+                    uraian: getVal(18),    // S
+                    fileMemo: getVal(22),  // W
+                    progres: getVal(23),   // X
+                    buktiServis: getVal(26)// AA
+                };
+            });
+            checkLoadStatus();
+        }
+
+        // --- CALLBACK 4: MONITORING (TAB 3) ---
+        window.handleMonitoringData = function(json) {
+            const rows = json.table.rows || [];
+            rawMonitoringData = rows.map(row => {
+                const getVal = (idx) => (row.c && row.c[idx]) ? (row.c[idx].f || row.c[idx].v || '') : '';
+                return {
+                    tanggal: getVal(1),   // B
+                    unit: getVal(2),      // C
+                    aktivitas: getVal(3), // D
+                    temuan: getVal(4),    // E
+                    photo: getVal(5)      // F
+                };
+            });
+            checkLoadStatus();
+        }
+
         function checkLoadStatus() {
             loadedSheets++;
-            if (loadedSheets >= 2) {
+            if (loadedSheets >= 4) {
                 document.getElementById('loading').classList.add('hidden');
                 
-                document.getElementById('filter-unit').addEventListener('change', filterAndRender);
-                document.getElementById('filter-nopol').addEventListener('input', filterAndRender);
-                
-                initDoubleScrollbar();
-                filterAndRender();
+                // Bind Filters Tab 1
+                document.getElementById('filter-unit').addEventListener('change', renderTab1);
+                document.getElementById('filter-nopol').addEventListener('input', renderTab1);
+
+                // Bind Filters Tab 2
+                document.getElementById('filter-aduan-start').addEventListener('change', renderTab2);
+                document.getElementById('filter-aduan-end').addEventListener('change', renderTab2);
+                document.getElementById('filter-aduan-unit').addEventListener('change', renderTab2);
+                document.getElementById('filter-aduan-progres').addEventListener('change', renderTab2);
+
+                // Bind Filters Tab 3
+                document.getElementById('filter-mon-start').addEventListener('change', renderTab3);
+                document.getElementById('filter-mon-end').addEventListener('change', renderTab3);
+                document.getElementById('filter-mon-unit').addEventListener('change', renderTab3);
+
+                renderTab1();
+                renderTab2();
+                renderTab3();
             }
         }
 
-        // Double Scrollbar Synchronization
-        function initDoubleScrollbar() {
-            const topScrollContainer = document.getElementById('top-scrollbar-container');
-            const topScrollSpacer = document.getElementById('top-scrollbar-spacer');
-            const mainTableContainer = document.getElementById('main-table-container');
+        // TAB SWITCHING
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + tabId).classList.add('active');
 
-            topScrollContainer.addEventListener('scroll', () => {
-                mainTableContainer.scrollLeft = topScrollContainer.scrollLeft;
-            });
+            document.getElementById('content-tab1').classList.add('hidden');
+            document.getElementById('content-tab2').classList.add('hidden');
+            document.getElementById('content-tab3').classList.add('hidden');
 
-            mainTableContainer.addEventListener('scroll', () => {
-                topScrollContainer.scrollLeft = mainTableContainer.scrollLeft;
-            });
-
-            const resizeObserver = new ResizeObserver(() => {
-                topScrollSpacer.style.width = mainTableContainer.scrollWidth + 'px';
-            });
-            resizeObserver.observe(mainTableContainer);
+            document.getElementById('content-' + tabId).classList.remove('hidden');
         }
 
-        // Helper Mengubah Drive URL ke Preview Direct Link
+        // IMAGE FORMATTER & MODAL
         function formatImageUrl(url) {
             if (!url) return '';
             let strUrl = url.toString().trim();
             if (strUrl.includes('drive.google.com') || strUrl.includes('docs.google.com')) {
                 let match = strUrl.match(/[-\w]{25,}/);
-                if (match) {
-                    return `https://drive.google.com/thumbnail?id=${match[0]}&sz=w800`;
-                }
+                if (match) return `https://drive.google.com/thumbnail?id=${match[0]}&sz=w800`;
             }
             return strUrl;
         }
 
-        // Modal Preview Zoom
         function openImageModal(imgUrl) {
             if (!imgUrl) return;
-            const modal = document.getElementById('image-modal');
-            const modalImg = document.getElementById('modal-img-preview');
-            const downloadLink = document.getElementById('modal-download-link');
-            
-            modalImg.src = imgUrl;
-            downloadLink.href = imgUrl;
-            modal.classList.remove('hidden');
+            document.getElementById('modal-img-preview').src = imgUrl;
+            document.getElementById('modal-download-link').href = imgUrl;
+            document.getElementById('image-modal').classList.remove('hidden');
         }
 
         function closeImageModal() {
-            const modal = document.getElementById('image-modal');
-            modal.classList.add('hidden');
+            document.getElementById('image-modal').classList.add('hidden');
             document.getElementById('modal-img-preview').src = '';
         }
 
-        function resetFilters() {
-            document.getElementById('filter-unit').value = '';
-            document.getElementById('filter-nopol').value = '';
-            filterAndRender();
+        // DATE PARSER HELPER
+        function parseDate(str) {
+            if (!str) return 0;
+            const d = new Date(str);
+            return isNaN(d.getTime()) ? 0 : d.getTime();
         }
 
-        // Filter and Render Main Logic
-        function filterAndRender() {
+        // ================= RENDER TAB 1 =================
+        function renderTab1() {
             const selectedUnit = document.getElementById('filter-unit').value;
             const searchNopol = document.getElementById('filter-nopol').value.trim().toLowerCase();
 
@@ -592,52 +752,28 @@
                 const link = mapsMap[selectedUnit.toLowerCase()];
                 if (link && (link.startsWith('http://') || link.startsWith('https://'))) {
                     mapsContainer.innerHTML = `
-                        <a href="${link}" target="_blank" rel="noopener" class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 active:scale-95 text-white font-bold py-2.5 px-4 rounded-xl shadow-md shadow-rose-500/20 transition-all text-xs">
+                        <a href="${link}" target="_blank" rel="noopener" class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-rose-500 to-red-600 text-white font-bold py-2.5 px-4 rounded-xl shadow-md text-xs">
                             <i class="fa-solid fa-location-arrow"></i> Buka Google Maps Lokasi
                         </a>
                     `;
                 } else {
-                    mapsContainer.innerHTML = `
-                        <div class="text-center text-xs text-amber-700 bg-amber-50 py-2.5 px-3 rounded-xl border border-amber-200/60 font-medium">
-                            <i class="fa-solid fa-triangle-exclamation"></i> Link Maps tidak tersedia / tidak valid
-                        </div>
-                    `;
+                    mapsContainer.innerHTML = `<div class="text-center text-xs text-amber-700 bg-amber-50 py-2.5 px-3 rounded-xl border border-amber-200">Link Maps tidak tersedia</div>`;
                 }
             } else {
                 unitLabel.textContent = '-';
-                mapsContainer.innerHTML = `
-                    <div class="text-center text-xs text-slate-400 bg-slate-50 py-2.5 px-3 rounded-xl border border-dashed border-slate-200 font-medium flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-circle-info"></i> Pilih "Unit Kerja" untuk link lokasi
-                    </div>
-                `;
+                mapsContainer.innerHTML = `<div class="text-center text-xs text-slate-400 bg-slate-50 py-2.5 px-3 rounded-xl border border-dashed border-slate-200">Pilih Unit Kerja untuk link lokasi</div>`;
             }
 
             let filtered = rawDetailData;
+            if (selectedUnit) filtered = filtered.filter(row => row[1] && row[1].toString().trim().toLowerCase() === selectedUnit.toLowerCase());
+            if (searchNopol) filtered = filtered.filter(row => row[2] && row[2].toString().trim().toLowerCase().includes(searchNopol));
 
-            if (selectedUnit) {
-                filtered = filtered.filter(row => row[1] && row[1].toString().trim().toLowerCase() === selectedUnit.toLowerCase());
-            }
-
-            if (searchNopol) {
-                filtered = filtered.filter(row => row[2] && row[2].toString().trim().toLowerCase().includes(searchNopol));
-            }
-
-            let motorCount = 0, mobilCount = 0;
-            let motorAktif = 0, motorHabis = 0;
-            let mobilAktif = 0, mobilHabis = 0;
-
-            let beatCount = 0, varioCount = 0, revoCount = 0;
-            let avanzaCount = 0, innovaCount = 0;
-
+            let motorCount = 0, mobilCount = 0, motorAktif = 0, motorHabis = 0, mobilAktif = 0, mobilHabis = 0;
+            let beatCount = 0, varioCount = 0, revoCount = 0, avanzaCount = 0, innovaCount = 0;
             let uniqueAreas = new Set();
 
             filtered.forEach(row => {
-                if (selectedUnit) {
-                    const colA = row[0] ? row[0].toString().trim() : '';
-                    if(colA && colA !== 'AREA' && colA !== 'Area') {
-                        uniqueAreas.add(colA);
-                    }
-                }
+                if (selectedUnit && row[0]) uniqueAreas.add(row[0].toString().trim());
 
                 const colD = row[3] ? row[3].toString().toUpperCase() : '';
                 const colK = row[10] ? row[10].toString().toUpperCase() : ''; 
@@ -663,33 +799,16 @@
                 if (colD.includes('INNOVA')) innovaCount++;
             });
 
-            // Update Card Area
-            const areaDisplay = document.getElementById('resume-area');
-            const subBlockArea = document.getElementById('sub-block-area');
-            const textSubArea = document.getElementById('text-sub-area');
-
-            if (!selectedUnit) {
-                areaDisplay.textContent = "PNM YOGYAKARTA";
-                subBlockArea.classList.add('hidden');
-            } else {
-                areaDisplay.textContent = selectedUnit.toUpperCase();
-                subBlockArea.classList.remove('hidden');
-                
-                if (uniqueAreas.size > 0) {
-                    textSubArea.textContent = Array.from(uniqueAreas).join(', ');
-                } else {
-                    textSubArea.textContent = "-";
-                }
-            }
+            document.getElementById('resume-area').textContent = selectedUnit ? selectedUnit.toUpperCase() : "PNM YOGYAKARTA";
+            document.getElementById('sub-block-area').classList.toggle('hidden', !selectedUnit);
+            document.getElementById('text-sub-area').textContent = uniqueAreas.size > 0 ? Array.from(uniqueAreas).join(', ') : '-';
             
             document.getElementById('resume-motor').textContent = motorCount;
             document.getElementById('motor-aktif').textContent = motorAktif;
             document.getElementById('motor-habis').textContent = motorHabis;
-
             document.getElementById('resume-mobil').textContent = mobilCount;
             document.getElementById('mobil-aktif').textContent = mobilAktif;
             document.getElementById('mobil-habis').textContent = mobilHabis;
-
             document.getElementById('filtered-count').textContent = filtered.length;
 
             document.getElementById('type-beat').textContent = beatCount;
@@ -698,96 +817,188 @@
             document.getElementById('type-avanza').textContent = avanzaCount;
             document.getElementById('type-innova').textContent = innovaCount;
 
-            const tbody = document.getElementById('table-body');
+            const tbody = document.getElementById('table-body-tab1');
             tbody.innerHTML = '';
 
             if (filtered.length === 0) {
-                document.getElementById('empty-state').classList.remove('hidden');
+                document.getElementById('empty-state-tab1').classList.remove('hidden');
             } else {
-                document.getElementById('empty-state').classList.add('hidden');
-                
-                filtered.forEach((row, rowIndex) => {
+                document.getElementById('empty-state-tab1').classList.add('hidden');
+                filtered.forEach(row => {
                     const tr = document.createElement('tr');
-                    tr.className = 'hover:bg-blue-50/40 transition-colors border-b border-slate-100/80';
+                    tr.className = 'hover:bg-blue-50/40 border-b border-slate-100';
                     
-                    // Render Kolom A s.d. K (Index 0 s.d. 10)
                     for(let i = 0; i < 11; i++) {
                         const td = document.createElement('td');
                         td.className = 'px-5 py-3.5 whitespace-nowrap text-slate-700';
-                        
-                        // Formatting Khusus Kolom NOPOL (Index 2)
                         if (i === 2) {
-                            td.innerHTML = `
-                                <span class="plate-tag bg-slate-900 text-amber-300 font-extrabold px-3 py-1 rounded-md border border-slate-700 text-xs shadow-xs inline-block">
-                                    ${row[i]}
-                                </span>`;
-                        } 
-                        // Formatting Khusus Status Sewa (Index 10)
-                        else if (i === 10) {
+                            td.innerHTML = `<span class="plate-tag bg-slate-900 text-amber-300 font-extrabold px-3 py-1 rounded-md text-xs">${row[i]}</span>`;
+                        } else if (i === 10) {
                             const val = row[i] ? row[i].toString().toUpperCase() : '';
-                            if (val.includes('MASIH SEWA')) {
-                                td.innerHTML = `<span class="bg-emerald-100 text-emerald-800 border border-emerald-300/80 text-[11px] font-extrabold px-2.5 py-1 rounded-full inline-flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i> MASIH SEWA</span>`;
-                            } else if (val.includes('HABIS SEWA')) {
-                                td.innerHTML = `<span class="bg-rose-100 text-rose-800 border border-rose-300/80 text-[11px] font-extrabold px-2.5 py-1 rounded-full inline-flex items-center gap-1.5"><i class="fa-solid fa-circle-xmark text-rose-600 text-[10px]"></i> HABIS SEWA</span>`;
-                            } else {
-                                td.textContent = row[i];
-                            }
-                        }
-                        else {
+                            td.innerHTML = val.includes('MASIH SEWA') 
+                                ? `<span class="bg-emerald-100 text-emerald-800 font-extrabold px-2.5 py-1 rounded-full text-[11px]"><i class="fa-solid fa-circle-check"></i> MASIH SEWA</span>`
+                                : `<span class="bg-rose-100 text-rose-800 font-extrabold px-2.5 py-1 rounded-full text-[11px]"><i class="fa-solid fa-circle-xmark"></i> HABIS SEWA</span>`;
+                        } else {
                             td.textContent = row[i];
                         }
                         tr.appendChild(td);
                     }
 
-                    // Render Kolom M s.d. Q (Index 12 s.d. 16)
-                    // Index 12: TANGGAL PRESENSI
-                    const tdM = document.createElement('td');
-                    tdM.className = 'px-5 py-3.5 whitespace-nowrap text-slate-700 font-semibold text-xs';
-                    tdM.textContent = row[12] ? row[12].toString() : '-';
-                    tr.appendChild(tdM);
+                    const tdM = document.createElement('td'); tdM.className = 'px-5 py-3.5 text-xs'; tdM.textContent = row[12] || '-'; tr.appendChild(tdM);
+                    const tdN = document.createElement('td'); tdN.className = 'px-5 py-3.5 font-bold text-xs'; tdN.textContent = row[13] || '-'; tr.appendChild(tdN);
 
-                    // Index 13: KILOMETER
-                    const tdN = document.createElement('td');
-                    tdN.className = 'px-5 py-3.5 whitespace-nowrap text-slate-800 font-bold font-mono text-xs';
-                    tdN.textContent = row[13] ? row[13].toString() : '-';
-                    tr.appendChild(tdN);
-
-                    // Index 14-16: TAMPAK DEPAN, TAMPAK BELAKANG, STNK
                     for (let imgIdx = 14; imgIdx <= 16; imgIdx++) {
                         const tdImg = document.createElement('td');
-                        tdImg.className = 'px-5 py-3 whitespace-nowrap';
+                        tdImg.className = 'px-5 py-3';
                         const rawUrl = row[imgIdx] ? row[imgIdx].toString().trim() : '';
-                        
                         if (rawUrl && (rawUrl.startsWith('http://') || rawUrl.startsWith('https://'))) {
                             const formattedUrl = formatImageUrl(rawUrl);
-                            tdImg.innerHTML = `
-                                <div class="relative group w-12 h-12 rounded-xl overflow-hidden border border-slate-200 shadow-xs bg-slate-100 cursor-pointer hover:border-blue-500 hover:shadow-md transition-all" onclick="openImageModal('${formattedUrl}')">
-                                    <img src="${formattedUrl}" alt="Thumbnail" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-[9px] text-slate-400 p-1 block text-center mt-2\\'>Error</span>';">
-                                    <div class="absolute inset-0 bg-blue-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs">
-                                        <i class="fa-solid fa-magnifying-glass-plus"></i>
-                                    </div>
-                                </div>
-                            `;
+                            tdImg.innerHTML = `<div class="w-12 h-12 rounded-xl overflow-hidden border bg-slate-100 cursor-pointer hover:scale-105 transition-all" onclick="openImageModal('${formattedUrl}')"><img src="${formattedUrl}" class="w-full h-full object-cover"></div>`;
                         } else {
-                            tdImg.innerHTML = `<span class="text-xs text-slate-400 font-normal italic">-</span>`;
+                            tdImg.innerHTML = `<span class="text-xs text-slate-400 italic">-</span>`;
                         }
                         tr.appendChild(tdImg);
                     }
-
                     tbody.appendChild(tr);
                 });
             }
-
-            setTimeout(() => {
-                const mainTableContainer = document.getElementById('main-table-container');
-                document.getElementById('top-scrollbar-spacer').style.width = mainTableContainer.scrollWidth + 'px';
-            }, 50);
         }
 
-        // Initialize Fetch on Page Load
+        function resetFiltersTab1() {
+            document.getElementById('filter-unit').value = '';
+            document.getElementById('filter-nopol').value = '';
+            renderTab1();
+        }
+
+        // ================= RENDER TAB 2 (PENGADUAN) =================
+        function renderTab2() {
+            const startDate = document.getElementById('filter-aduan-start').value;
+            const endDate = document.getElementById('filter-aduan-end').value;
+            const unit = document.getElementById('filter-aduan-unit').value;
+            const progres = document.getElementById('filter-aduan-progres').value;
+
+            let filtered = [...rawPengaduanData];
+
+            if (startDate) filtered = filtered.filter(item => parseDate(item.tanggal) >= parseDate(startDate));
+            if (endDate) filtered = filtered.filter(item => parseDate(item.tanggal) <= parseDate(endDate) + 86400000);
+            if (unit) filtered = filtered.filter(item => item.unit.toLowerCase() === unit.toLowerCase());
+            if (progres) filtered = filtered.filter(item => item.progres.toUpperCase() === progres.toUpperCase());
+
+            // Urutkan Tanggal Termuda ke Tertua
+            filtered.sort((a, b) => parseDate(b.tanggal) - parseDate(a.tanggal));
+
+            // Resume Calculations
+            let doneCount = filtered.filter(i => i.progres.toUpperCase() === 'DONE').length;
+            let prosesCount = filtered.filter(i => i.progres.toUpperCase() === 'PROSES').length;
+
+            document.getElementById('card-aduan-total').textContent = filtered.length;
+            document.getElementById('card-aduan-done').textContent = doneCount;
+            document.getElementById('card-aduan-proses').textContent = prosesCount;
+
+            const tbody = document.getElementById('table-body-tab2');
+            tbody.innerHTML = '';
+
+            if (filtered.length === 0) {
+                document.getElementById('empty-state-tab2').classList.remove('hidden');
+            } else {
+                document.getElementById('empty-state-tab2').classList.add('hidden');
+                filtered.forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50 border-b border-slate-100';
+
+                    const renderFileLink = (url, label) => {
+                        if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+                            return `<a href="${url}" target="_blank" rel="noopener" class="text-blue-600 font-bold hover:underline flex items-center gap-1"><i class="fa-solid fa-file-arrow-down"></i> ${label}</a>`;
+                        }
+                        return '<span class="text-slate-400 italic">-</span>';
+                    };
+
+                    const progresBadge = item.progres.toUpperCase() === 'DONE' 
+                        ? `<span class="bg-emerald-100 text-emerald-800 font-extrabold px-2.5 py-1 rounded-full text-[10px]">DONE</span>`
+                        : `<span class="bg-amber-100 text-amber-800 font-extrabold px-2.5 py-1 rounded-full text-[10px]">PROSES</span>`;
+
+                    tr.innerHTML = `
+                        <td class="px-4 py-3 whitespace-nowrap font-semibold">${item.tanggal || '-'}</td>
+                        <td class="px-4 py-3 whitespace-nowrap">${item.unit || '-'}</td>
+                        <td class="px-4 py-3 whitespace-nowrap"><span class="plate-tag bg-slate-900 text-amber-300 font-bold px-2 py-0.5 rounded text-[11px]">${item.nopol || '-'}</span></td>
+                        <td class="px-4 py-3 max-w-xs md:max-w-sm lg:max-w-md break-words whitespace-normal leading-relaxed text-slate-800 font-normal">${item.uraian || '-'}</td>
+                        <td class="px-4 py-3 whitespace-nowrap">${renderFileLink(item.fileMemo, 'Lihat Memo')}</td>
+                        <td class="px-4 py-3 whitespace-nowrap">${progresBadge}</td>
+                        <td class="px-4 py-3 whitespace-nowrap">${renderFileLink(item.buktiServis, 'Lihat Bukti')}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+        }
+
+        function resetFiltersTab2() {
+            document.getElementById('filter-aduan-start').value = '';
+            document.getElementById('filter-aduan-end').value = '';
+            document.getElementById('filter-aduan-unit').value = '';
+            document.getElementById('filter-aduan-progres').value = '';
+            renderTab2();
+        }
+
+        // ================= RENDER TAB 3 (MONITORING) =================
+        function renderTab3() {
+            const startDate = document.getElementById('filter-mon-start').value;
+            const endDate = document.getElementById('filter-mon-end').value;
+            const unit = document.getElementById('filter-mon-unit').value;
+
+            let filtered = [...rawMonitoringData];
+
+            if (startDate) filtered = filtered.filter(item => parseDate(item.tanggal) >= parseDate(startDate));
+            if (endDate) filtered = filtered.filter(item => parseDate(item.tanggal) <= parseDate(endDate) + 86400000);
+            if (unit) filtered = filtered.filter(item => item.unit.toLowerCase() === unit.toLowerCase());
+
+            // Urutkan Tanggal Termuda ke Tertua
+            filtered.sort((a, b) => parseDate(b.tanggal) - parseDate(a.tanggal));
+
+            const tbody = document.getElementById('table-body-tab3');
+            tbody.innerHTML = '';
+
+            if (filtered.length === 0) {
+                document.getElementById('empty-state-tab3').classList.remove('hidden');
+            } else {
+                document.getElementById('empty-state-tab3').classList.add('hidden');
+                filtered.forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50 border-b border-slate-100';
+
+                    let photoContent = '<span class="text-slate-400 italic">-</span>';
+                    if (item.photo && (item.photo.startsWith('http://') || item.photo.startsWith('https://'))) {
+                        const formattedUrl = formatImageUrl(item.photo);
+                        photoContent = `
+                            <div class="w-12 h-12 rounded-xl overflow-hidden border bg-slate-100 cursor-pointer hover:scale-105 transition-all" onclick="openImageModal('${formattedUrl}')">
+                                <img src="${formattedUrl}" class="w-full h-full object-cover">
+                            </div>`;
+                    }
+
+                    tr.innerHTML = `
+                        <td class="px-4 py-3 whitespace-nowrap font-semibold">${item.tanggal || '-'}</td>
+                        <td class="px-4 py-3 whitespace-nowrap font-bold">${item.unit || '-'}</td>
+                        <td class="px-4 py-3">${item.aktivitas || '-'}</td>
+                        <td class="px-4 py-3">${item.temuan || '-'}</td>
+                        <td class="px-4 py-3 whitespace-nowrap">${photoContent}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+        }
+
+        function resetFiltersTab3() {
+            document.getElementById('filter-mon-start').value = '';
+            document.getElementById('filter-mon-end').value = '';
+            document.getElementById('filter-mon-unit').value = '';
+            renderTab3();
+        }
+
+        // INITIALIZE APP
         window.addEventListener('DOMContentLoaded', () => {
             fetchSheetDataJSONP('OPERATOR', 'handleOperatorData');
             fetchSheetDataJSONP('DETAIL', 'handleDetailData');
+            fetchSheetDataJSONP('PENGADUAN', 'handlePengaduanData');
+            fetchSheetDataJSONP('MONITORING', 'handleMonitoringData');
         });
     </script>
 </body>
