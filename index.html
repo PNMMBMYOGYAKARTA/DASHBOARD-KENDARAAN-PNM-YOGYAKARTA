@@ -1,285 +1,429 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Kendaraan MBM PNM Yogyakarta</title>
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS v4 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- FontAwesome 6 for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f8fafc;
+            background-color: #f1f5f9;
         }
+        
+        /* Custom Brand Color Definitions */
+        :root {
+            --pnm-blue-dark: #003B73;
+            --pnm-blue: #0056B3;
+            --pnm-cyan: #00A3E0;
+            --pnm-green: #00A859;
+            --pnm-green-light: #25D366;
+        }
+
+        .bg-pnm-gradient {
+            background: linear-gradient(135deg, #002B5B 0%, #0056B3 50%, #00A859 100%);
+        }
+
+        .bg-card-gradient {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.9) 100%);
+        }
+
+        /* Custom Scrollbar */
         .custom-scrollbar::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 4px;
+            background: #e2e8f0;
+            border-radius: 6px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
+            background: #94a3b8;
+            border-radius: 6px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+            background: #64748b;
+        }
+
+        /* License Plate styling */
+        .plate-tag {
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: 1px;
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Pulse animation for active indicator */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .pulse-indicator {
+            animation: pulse-ring 2s infinite ease-in-out;
         }
     </style>
 </head>
-<body class="text-slate-800 antialiased">
+<body class="text-slate-800 antialiased min-h-screen flex flex-col selection:bg-blue-500 selection:text-white">
 
-    <!-- Top Navbar -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="bg-blue-600 text-white p-2 rounded-lg shadow-md shadow-blue-200">
-                    <i class="fa-solid fa-car-side text-xl"></i>
+    <!-- Top Header Navigation -->
+    <header class="bg-pnm-gradient text-white shadow-lg sticky top-0 z-50 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                
+                <!-- Logo & Title Section -->
+                <div class="flex items-center gap-3.5">
+                    <div class="bg-white/10 backdrop-blur-md p-2.5 rounded-2xl border border-white/20 shadow-inner flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-car-side text-2xl text-cyan-300"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider">PT PNM</span>
+                            <span class="text-xs text-blue-200 font-medium tracking-wide">CABANG YOGYAKARTA</span>
+                        </div>
+                        <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white leading-tight">DASHBOARD KENDARAAN MBM</h1>
+                    </div>
                 </div>
-                <div>
-                    <h1 class="text-xl font-bold text-slate-900 tracking-tight">DASHBOARD KENDARAAN MBM PNM YOGYAKARTA</h1>
-                    <p class="text-xs text-slate-500 font-medium">Data Kendaraan Operasional PT Permodalan Nasional Madani Cabang Yogyakarta</p>
+
+                <!-- Contact & Operator Info (WhatsApp Button) -->
+                <div class="flex items-center gap-3 self-end md:self-auto">
+                    <a href="https://wa.me/6285643782103" target="_blank" rel="noopener font-medium"
+                       class="group flex items-center gap-3 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white px-4 py-2 rounded-full shadow-lg shadow-emerald-900/20 border border-emerald-400/40 transition-all duration-300">
+                        <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white group-hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-whatsapp text-lg"></i>
+                        </div>
+                        <div class="text-left pr-1">
+                            <p class="text-[10px] font-extrabold tracking-wider text-emerald-100 uppercase leading-none">HUBUNGI OPERATOR</p>
+                            <p class="text-xs font-bold text-white mt-0.5">RAFLI <span class="opacity-80 font-normal">| RO MBM</span></p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-xs opacity-60 group-hover:translate-x-1 transition-transform ml-1"></i>
+                    </a>
                 </div>
+
             </div>
-            
-            <!-- WhatsApp Button -->
-            <a href="https://wa.me/6285643782103" target="_blank" class="flex items-center gap-3 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl shadow-md shadow-emerald-100 transition-all text-left">
-                <i class="fa-brands fa-whatsapp text-2xl"></i>
-                <div>
-                    <p class="text-xs font-bold leading-tight">RAFLI</p>
-                    <p class="text-[10px] font-medium opacity-90 leading-none">RO MBM YOGYAKARTA</p>
-                </div>
-            </a>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        
+    <!-- Main Dashboard Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 flex-grow w-full">
+
         <!-- Loading Overlay -->
-        <div id="loading" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex flex-col items-center justify-center text-white gap-3">
-            <div class="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
-            <p class="font-medium tracking-wide">LOADING...</p>
+        <div id="loading" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] flex flex-col items-center justify-center text-white gap-4 transition-all">
+            <div class="relative flex items-center justify-center">
+                <div class="w-16 h-16 border-4 border-emerald-400/30 border-t-emerald-400 rounded-full animate-spin"></div>
+                <i class="fa-solid fa-shield-halved absolute text-emerald-400 text-lg"></i>
+            </div>
+            <div class="text-center">
+                <p class="font-bold text-lg tracking-wide">Memuat Data Kendaraan...</p>
+                <p class="text-xs text-slate-300 font-medium mt-1">Mengambil data realtime dari server PNM</p>
+            </div>
         </div>
 
-        <!-- Filter Section & Maps Info -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Filters -->
-            <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                <div class="flex items-center gap-2 pb-3 border-b border-slate-100">
-                    <i class="fa-solid fa-sliders text-blue-600"></i>
-                    <h2 class="font-bold text-slate-900">Filter Pencarian Data</h2>
+        <!-- Filter Control Section & Location Link Card -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            
+            <!-- Filters Card -->
+            <div class="lg:col-span-2 bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-sliders text-sm"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-bold text-slate-900 text-sm">Filter & Search Data</h2>
+                            <p class="text-[11px] text-slate-400 font-medium">Saring data kendaraan berdasarkan NOPOL atau Unit Kerja</p>
+                        </div>
+                    </div>
+                    <button onclick="resetFilters()" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50">
+                        <i class="fa-solid fa-rotate-left text-[10px]"></i> Reset
+                    </button>
                 </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Filter Nopol -->
+                    <!-- Filter NOPOL -->
                     <div class="space-y-1.5">
-                        <label for="filter-nopol" class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Nomor Polisi (NOPOL)</label>
+                        <label for="filter-nopol" class="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-id-card text-blue-600"></i> Nomor Polisi (NOPOL)
+                        </label>
                         <div class="relative">
-                            <input type="text" id="filter-nopol" placeholder="Cari No. Polisi..." class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-3 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium placeholder:text-slate-400">
-                            <i class="fa-solid fa-id-card absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                            <input type="text" id="filter-nopol" placeholder="Contoh: AB 1234 XX..." 
+                                class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm font-semibold rounded-xl px-4 py-2.5 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all placeholder:text-slate-400 placeholder:font-normal">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
                         </div>
                     </div>
 
-                    <!-- Dropdown Unit -->
+                    <!-- Dropdown Unit Kerja -->
                     <div class="space-y-1.5">
-                        <label for="filter-unit" class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Unit Kerja</label>
+                        <label for="filter-unit" class="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-building-user text-emerald-600"></i> Unit Kerja / Kantor
+                        </label>
                         <div class="relative">
-                            <select id="filter-unit" class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-3 pl-10 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer font-medium">
-                                <option value="">-- Semua Asset --</option>
+                            <select id="filter-unit" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm font-semibold rounded-xl px-4 py-2.5 pl-10 appearance-none focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all cursor-pointer">
+                                <option value="">-- Semua Asset / Seluruh Unit --</option>
                             </select>
-                            <i class="fa-solid fa-building-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                            <i class="fa-solid fa-location-dot absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
                             <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Maps Link Card -->
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+            <!-- Maps / Location Quick Info Card -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
                 <div>
-                    <div class="flex items-center gap-2 pb-3 border-b border-slate-100">
-                        <i class="fa-solid fa-map-location-dot text-rose-500"></i>
-                        <h2 class="font-bold text-slate-900">Informasi Lokasi</h2>
+                    <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+                        <div class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-map-location-dot text-sm"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-bold text-slate-900 text-sm">Informasi Lokasi Unit</h2>
+                            <p class="text-[11px] text-slate-400 font-medium">Navigasi Google Maps</p>
+                        </div>
                     </div>
-                    <div class="py-4">
-                        <p class="text-xs text-slate-400 font-medium uppercase tracking-wider mb-1">Unit Kerja Terpilih</p>
-                        <p id="selected-unit-name" class="font-bold text-slate-800 text-lg">-</p>
+                    
+                    <div class="py-3.5">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Unit Kerja Terpilih</p>
+                        <p id="selected-unit-name" class="font-extrabold text-slate-900 text-base mt-0.5 line-clamp-1">-</p>
                     </div>
                 </div>
+
                 <div id="maps-btn-container">
-                    <p class="block text-center text-sm text-slate-400 bg-slate-50 py-3 rounded-xl border border-dashed border-slate-200 font-medium">Silakan pilih "Unit Kerja" untuk melihat lokasi</p>
+                    <div class="text-center text-xs text-slate-400 bg-slate-50 py-2.5 px-3 rounded-xl border border-dashed border-slate-200 font-medium flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-circle-info text-slate-400"></i> Pilih Unit Kerja untuk link lokasi
+                    </div>
                 </div>
             </div>
+
         </div>
 
-        <!-- Resume Cards / Counters Utama -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Card Area dengan Sub-Blok Dinamis -->
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between gap-4">
-                <div class="flex items-center justify-between">
-                    <div class="space-y-1">
-                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider"></p>
-                        <p id="resume-area" class="text-2xl font-black text-slate-900">PNM YOGYAKARTA</p>
-                    </div>
-                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shadow-inner">
-                        <i class="fa-solid fa-map"></i>
-                    </div>
-                </div>
-                <!-- Sub-Blok Nilai Kolom A -->
-                <div id="sub-block-area" class="hidden border-t border-slate-100 pt-3">
-                    <div class="bg-blue-50/50 border border-blue-100/70 p-2 rounded-xl">
-                        <p class="text-[10px] font-bold text-blue-600 uppercase tracking-wider">AREA KERJA</p>
-                        <p id="text-sub-area" class="text-sm font-bold text-slate-800 mt-0.5">-</p>
+        <!-- Key Metrics & Counter Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            
+            <!-- Card 1: Area Info -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
+                <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-blue-500/5 rounded-full group-hover:scale-125 transition-transform"></div>
+                <div>
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">Wilayah Operasional</span>
+                            <h3 id="resume-area" class="text-xl font-extrabold text-slate-900 mt-2">PNM YOGYAKARTA</h3>
+                        </div>
+                        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 text-white flex items-center justify-center text-lg shadow-md shadow-blue-500/20">
+                            <i class="fa-solid fa-map-location"></i>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Card Motor -->
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between gap-4">
-                <div class="flex items-center justify-between">
-                    <div class="space-y-1">
-                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Motor</p>
-                        <p id="resume-motor" class="text-3xl font-black text-slate-900">0</p>
-                    </div>
-                    <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl shadow-inner">
-                        <i class="fa-solid fa-motorcycle"></i>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2 border-t border-slate-100 pt-3">
-                    <div class="bg-emerald-50/50 border border-emerald-100/70 p-2 rounded-xl">
-                        <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Aktif Sewa</p>
-                        <p id="motor-aktif" class="text-lg font-bold text-slate-800 mt-0.5">0</p>
-                    </div>
-                    <div class="bg-rose-50/50 border border-rose-100/70 p-2 rounded-xl">
-                        <p class="text-[10px] font-bold text-rose-600 uppercase tracking-wider">Habis Sewa</p>
-                        <p id="motor-habis" class="text-lg font-bold text-slate-800 mt-0.5">0</p>
+                
+                <div id="sub-block-area" class="hidden border-t border-slate-100 pt-3 mt-4">
+                    <div class="bg-slate-50 border border-slate-100 p-2.5 rounded-xl flex items-center justify-between">
+                        <div>
+                            <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">AREA KERJA</p>
+                            <p id="text-sub-area" class="text-xs font-bold text-slate-800 mt-0.5 truncate max-w-[200px]">-</p>
+                        </div>
+                        <i class="fa-solid fa-building text-slate-300 text-sm"></i>
                     </div>
                 </div>
             </div>
 
-            <!-- Card Mobil -->
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between gap-4">
-                <div class="flex items-center justify-between">
-                    <div class="space-y-1">
-                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Mobil</p>
-                        <p id="resume-mobil" class="text-3xl font-black text-slate-900">0</p>
-                    </div>
-                    <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl shadow-inner">
-                        <i class="fa-solid fa-car"></i>
+            <!-- Card 2: Motor Fleet Stats -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
+                <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-amber-500/5 rounded-full group-hover:scale-125 transition-transform"></div>
+                <div>
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-100">Armada Roda Dua</span>
+                            <div class="flex items-baseline gap-2 mt-1">
+                                <span id="resume-motor" class="text-3xl font-black text-slate-900">0</span>
+                                <span class="text-xs font-bold text-slate-400">Unit Motor</span>
+                            </div>
+                        </div>
+                        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 text-white flex items-center justify-center text-lg shadow-md shadow-amber-500/20">
+                            <i class="fa-solid fa-motorcycle"></i>
+                        </div>
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-2 border-t border-slate-100 pt-3">
-                    <div class="bg-emerald-50/50 border border-emerald-100/70 p-2 rounded-xl">
-                        <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Aktif Sewa</p>
-                        <p id="mobil-aktif" class="text-lg font-bold text-slate-800 mt-0.5">0</p>
+
+                <div class="grid grid-cols-2 gap-2 border-t border-slate-100 pt-3 mt-3">
+                    <div class="bg-emerald-50/70 border border-emerald-200/60 p-2.5 rounded-xl">
+                        <p class="text-[10px] font-extrabold text-emerald-700 uppercase tracking-wider">MASIH SEWA</p>
+                        <p id="motor-aktif" class="text-base font-extrabold text-emerald-800 mt-0.5">0</p>
                     </div>
-                    <div class="bg-rose-50/50 border border-rose-100/70 p-2 rounded-xl">
-                        <p class="text-[10px] font-bold text-rose-600 uppercase tracking-wider">Habis Sewa</p>
-                        <p id="mobil-habis" class="text-lg font-bold text-slate-800 mt-0.5">0</p>
+                    <div class="bg-rose-50/70 border border-rose-200/60 p-2.5 rounded-xl">
+                        <p class="text-[10px] font-extrabold text-rose-700 uppercase tracking-wider">HABIS SEWA</p>
+                        <p id="motor-habis" class="text-base font-extrabold text-rose-800 mt-0.5">0</p>
                     </div>
                 </div>
             </div>
+
+            <!-- Card 3: Mobil Fleet Stats -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
+                <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-indigo-500/5 rounded-full group-hover:scale-125 transition-transform"></div>
+                <div>
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">Armada Roda Empat</span>
+                            <div class="flex items-baseline gap-2 mt-1">
+                                <span id="resume-mobil" class="text-3xl font-black text-slate-900">0</span>
+                                <span class="text-xs font-bold text-slate-400">Unit Mobil</span>
+                            </div>
+                        </div>
+                        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-600 to-blue-700 text-white flex items-center justify-center text-lg shadow-md shadow-indigo-500/20">
+                            <i class="fa-solid fa-car"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 border-t border-slate-100 pt-3 mt-3">
+                    <div class="bg-emerald-50/70 border border-emerald-200/60 p-2.5 rounded-xl">
+                        <p class="text-[10px] font-extrabold text-emerald-700 uppercase tracking-wider">MASIH SEWA</p>
+                        <p id="mobil-aktif" class="text-base font-extrabold text-emerald-800 mt-0.5">0</p>
+                    </div>
+                    <div class="bg-rose-50/70 border border-rose-200/60 p-2.5 rounded-xl">
+                        <p class="text-[10px] font-extrabold text-rose-700 uppercase tracking-wider">HABIS SEWA</p>
+                        <p id="mobil-habis" class="text-base font-extrabold text-rose-800 mt-0.5">0</p>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <!-- Detail Tipe (Kolom D) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Kelompok Motor -->
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
-                <p class="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100 pb-2">Tipe Motor</p>
+        <!-- Breakdown Tipe Kendaraan -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            
+            <!-- Motor Type Breakdown -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all space-y-3">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                    <p class="text-xs font-extrabold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-motorcycle text-amber-500"></i> Breakdown Tipe Motor
+                    </p>
+                    <span class="text-[10px] font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded">Roda 2</span>
+                </div>
                 <div class="grid grid-cols-3 gap-3">
-                    <div class="border border-slate-100 rounded-xl p-3 bg-slate-50/50">
-                        <p class="text-[11px] font-bold text-slate-500 tracking-tight">HONDA BEAT</p>
-                        <p id="type-beat" class="text-2xl font-bold text-slate-900 mt-1">0</p>
+                    <div class="border border-slate-200/70 rounded-xl p-3 bg-slate-50/60 hover:bg-white hover:shadow-sm transition-all text-center">
+                        <p class="text-[10px] font-extrabold text-slate-400 tracking-wider">HONDA BEAT</p>
+                        <p id="type-beat" class="text-2xl font-black text-slate-800 mt-0.5">0</p>
                     </div>
-                    <div class="border border-slate-100 rounded-xl p-3 bg-slate-50/50">
-                        <p class="text-[11px] font-bold text-slate-500 tracking-tight">HONDA VARIO</p>
-                        <p id="type-vario" class="text-2xl font-bold text-slate-900 mt-1">0</p>
+                    <div class="border border-slate-200/70 rounded-xl p-3 bg-slate-50/60 hover:bg-white hover:shadow-sm transition-all text-center">
+                        <p class="text-[10px] font-extrabold text-slate-400 tracking-wider">HONDA VARIO</p>
+                        <p id="type-vario" class="text-2xl font-black text-slate-800 mt-0.5">0</p>
                     </div>
-                    <div class="border border-slate-100 rounded-xl p-3 bg-slate-50/50">
-                        <p class="text-[11px] font-bold text-slate-500 tracking-tight">HONDA REVO</p>
-                        <p id="type-revo" class="text-2xl font-bold text-slate-900 mt-1">0</p>
+                    <div class="border border-slate-200/70 rounded-xl p-3 bg-slate-50/60 hover:bg-white hover:shadow-sm transition-all text-center">
+                        <p class="text-[10px] font-extrabold text-slate-400 tracking-wider">HONDA REVO</p>
+                        <p id="type-revo" class="text-2xl font-black text-slate-800 mt-0.5">0</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Kelompok Mobil -->
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
-                <p class="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100 pb-2">Tipe Mobil</p>
-                <div class="grid grid-cols-3 gap-3">
-                    <div class="border border-slate-100 rounded-xl p-3 bg-slate-50/50">
-                        <p class="text-[11px] font-bold text-slate-500 tracking-tight">AVANZA</p>
-                        <p id="type-avanza" class="text-2xl font-bold text-slate-900 mt-1">0</p>
+            <!-- Mobil Type Breakdown -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all space-y-3">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                    <p class="text-xs font-extrabold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-car-side text-indigo-600"></i> Breakdown Tipe Mobil
+                    </p>
+                    <span class="text-[10px] font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded">Roda 4</span>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="border border-slate-200/70 rounded-xl p-3 bg-slate-50/60 hover:bg-white hover:shadow-sm transition-all text-center">
+                        <p class="text-[10px] font-extrabold text-slate-400 tracking-wider">TOYOTA AVANZA</p>
+                        <p id="type-avanza" class="text-2xl font-black text-slate-800 mt-0.5">0</p>
                     </div>
-                    <div class="border border-slate-100 rounded-xl p-3 bg-slate-50/50">
-                        <p class="text-[11px] font-bold text-slate-500 tracking-tight">INNOVA</p>
-                        <p id="type-innova" class="text-2xl font-bold text-slate-900 mt-1">0</p>
+                    <div class="border border-slate-200/70 rounded-xl p-3 bg-slate-50/60 hover:bg-white hover:shadow-sm transition-all text-center">
+                        <p class="text-[10px] font-extrabold text-slate-400 tracking-wider">TOYOTA INNOVA</p>
+                        <p id="type-innova" class="text-2xl font-black text-slate-800 mt-0.5">0</p>
                     </div>
-                    <div class="opacity-0"></div>
                 </div>
             </div>
+
         </div>
 
         <!-- Main Data Table Container -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
-            <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-table-list text-emerald-600"></i>
-                    <h2 class="font-bold text-slate-900">Detail Informasi Kendaraan</h2>
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-md overflow-hidden flex flex-col">
+            
+            <!-- Table Header Bar -->
+            <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center font-bold shadow-md shadow-emerald-500/20">
+                        <i class="fa-solid fa-table-list text-sm"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-extrabold text-slate-900 text-base leading-snug">Detail Informasi Kendaraan Operasional</h2>
+                        <p class="text-xs text-slate-400 font-medium">Data realtime kendaraan berdasarkan filter</p>
+                    </div>
                 </div>
-                <div class="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg">
-                    Menampilkan <span id="filtered-count" class="text-blue-600 font-bold">0</span> dari <span id="total-count" class="font-bold">0</span> Data
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-slate-600 bg-white border border-slate-200 px-3.5 py-1.5 rounded-full shadow-xs">
+                        Menampilkan <span id="filtered-count" class="text-blue-600 font-extrabold">0</span> dari <span id="total-count" class="font-extrabold text-slate-800">0</span> Data
+                    </span>
                 </div>
             </div>
             
-            <!-- Double Scrollbar Container -->
-            <div class="w-full bg-slate-50 border-b border-slate-100 p-2">
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-4 mb-1"><i class="fa-solid fa-arrows-left-right"></i> Geser slide ini untuk melihat kolom kanan:</p>
+            <!-- Double Horizontal Scrollbar Helper -->
+            <div class="w-full bg-slate-100/80 border-b border-slate-200/60 px-4 py-2 flex items-center gap-3">
+                <p class="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider shrink-0 flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrows-left-right text-blue-600"></i> Geser Tabel:
+                </p>
                 <div id="top-scrollbar-container" class="overflow-x-auto custom-scrollbar w-full">
                     <div id="top-scrollbar-spacer" class="h-1"></div>
                 </div>
             </div>
 
-            <!-- Konten Utama Kontainer Tabel -->
-            <div id="main-table-container" class="overflow-x-auto custom-scrollbar w-full">
+            <!-- Table Scrollable Area -->
+            <div id="main-table-container" class="overflow-x-auto custom-scrollbar w-full min-h-[300px]">
                 <table class="w-full text-left border-collapse min-w-max">
                     <thead>
-                        <tr id="table-headers" class="bg-slate-50/70 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase tracking-wider">
-                            <!-- Headers generated dynamically -->
+                        <tr id="table-headers" class="bg-slate-900 text-white text-xs font-extrabold uppercase tracking-wider sticky top-0 z-10 shadow-sm">
+                            <!-- Headers populated via JavaScript -->
                         </tr>
                     </thead>
-                    <tbody id="table-body" class="divide-y divide-slate-100 text-sm text-slate-600 font-medium">
-                        <!-- Rows generated dynamically -->
+                    <tbody id="table-body" class="divide-y divide-slate-100 text-sm font-medium text-slate-700">
+                        <!-- Rows populated via JavaScript -->
                     </tbody>
                 </table>
             </div>
 
             <!-- Empty State -->
-            <div id="empty-state" class="hidden py-16 flex flex-col items-center justify-center text-slate-400 gap-2">
-                <i class="fa-regular fa-folder-open text-4xl"></i>
-                <p class="font-medium text-sm">Tidak ada data yang cocok dengan kriteria pencarian</p>
+            <div id="empty-state" class="hidden py-16 flex flex-col items-center justify-center text-slate-400 gap-3">
+                <div class="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-slate-300 text-2xl">
+                    <i class="fa-regular fa-folder-open"></i>
+                </div>
+                <div class="text-center">
+                    <p class="font-bold text-slate-700 text-base">Tidak ada data yang sesuai</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Coba ubah kata kunci pencarian NOPOL atau pilih unit kerja lain</p>
+                </div>
             </div>
+
         </div>
 
     </main>
 
     <!-- Modal Image Preview (Semi Full Screen) -->
-    <div id="image-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-[100] hidden flex flex-col items-center justify-center p-4 transition-all" onclick="closeImageModal()">
+    <div id="image-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[100] hidden flex flex-col items-center justify-center p-4 transition-all duration-300" onclick="closeImageModal()">
         <div class="relative max-w-4xl max-h-[90vh] w-full flex flex-col items-center justify-center" onclick="event.stopPropagation()">
-            <button onclick="closeImageModal()" class="absolute -top-12 right-0 text-white bg-slate-800/80 hover:bg-slate-700 p-2.5 rounded-full w-10 h-10 flex items-center justify-center shadow-lg transition-all cursor-pointer">
+            <button onclick="closeImageModal()" class="absolute -top-12 right-0 text-white bg-white/10 hover:bg-white/20 p-2.5 rounded-full w-10 h-10 flex items-center justify-center backdrop-blur-md transition-all cursor-pointer">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
-            <img id="modal-img-preview" src="" alt="Gambar Perbesar" class="max-w-full max-h-[80vh] object-contain rounded-xl shadow-2xl border border-white/20">
-            <a id="modal-download-link" href="#" target="_blank" class="mt-4 inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-md transition-all">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Gambar Asli
+            <div class="bg-slate-900/50 p-2 rounded-2xl border border-white/10 shadow-2xl overflow-hidden max-h-[80vh]">
+                <img id="modal-img-preview" src="" alt="Gambar Kendaraan Preview" class="max-w-full max-h-[75vh] object-contain rounded-xl">
+            </div>
+            <a id="modal-download-link" href="#" target="_blank" rel="noopener" class="mt-4 inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2.5 rounded-full text-xs font-bold shadow-lg shadow-emerald-950/40 transition-all active:scale-95">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Gambar Ukuran Asli
             </a>
         </div>
     </div>
 
-    <footer class="bg-white border-t border-slate-200 mt-12 py-6 text-center text-xs font-medium text-slate-400">
-        &copy; 2026 PNM Yogyakarta &bull; Dashboard Kendaraan Interaktif
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200/80 mt-12 py-6 text-center text-xs font-semibold text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p>&copy; 2026 PT Permodalan Nasional Madani (PNM) Cabang Yogyakarta.</p>
+            <p class="text-slate-400">Dashboard Kendaraan MBM &bull; Modern Operations System</p>
+        </div>
     </footer>
 
     <script>
@@ -298,6 +442,7 @@
             "STNK"
         ];
 
+        // Fetch JSONP Data dari Google Sheets
         function fetchSheetDataJSONP(sheetName, callbackName) {
             const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=responseHandler:${callbackName}&sheet=${encodeURIComponent(sheetName)}`;
             const script = document.createElement('script');
@@ -305,6 +450,7 @@
             document.body.appendChild(script);
         }
 
+        // Callback Operator Data
         window.handleOperatorData = function(json) {
             const rows = json.table.rows;
             const dropdown = document.getElementById('filter-unit');
@@ -325,6 +471,7 @@
             checkLoadStatus();
         }
 
+        // Callback Detail Data
         window.handleDetailData = function(json) {
             const cols = json.table.cols;
             const rows = json.table.rows;
@@ -336,7 +483,7 @@
             const columnsToDisplay = cols.slice(0, 11);
             columnsToDisplay.forEach((col, idx) => {
                 const th = document.createElement('th');
-                th.className = 'px-6 py-4';
+                th.className = 'px-5 py-3.5 whitespace-nowrap font-extrabold';
                 th.textContent = col.label || `Kolom ${String.fromCharCode(65 + idx)}`;
                 headerRow.appendChild(th);
             });
@@ -344,7 +491,7 @@
             // Kolom M-Q (12 - 16)
             additionalHeaders.forEach((title, idx) => {
                 const th = document.createElement('th');
-                th.className = 'px-6 py-4';
+                th.className = 'px-5 py-3.5 whitespace-nowrap font-extrabold';
                 th.textContent = (cols[12 + idx] && cols[12 + idx].label) ? cols[12 + idx].label : title;
                 headerRow.appendChild(th);
             });
@@ -375,6 +522,7 @@
             }
         }
 
+        // Double Scrollbar Synchronization
         function initDoubleScrollbar() {
             const topScrollContainer = document.getElementById('top-scrollbar-container');
             const topScrollSpacer = document.getElementById('top-scrollbar-spacer');
@@ -394,7 +542,7 @@
             resizeObserver.observe(mainTableContainer);
         }
 
-        // Fungsi Helper Mengubah URL Drive ke URL Direct Preview
+        // Helper Mengubah Drive URL ke Preview Direct Link
         function formatImageUrl(url) {
             if (!url) return '';
             let strUrl = url.toString().trim();
@@ -407,7 +555,7 @@
             return strUrl;
         }
 
-        // Modal Zoom Function
+        // Modal Preview Zoom
         function openImageModal(imgUrl) {
             if (!imgUrl) return;
             const modal = document.getElementById('image-modal');
@@ -425,6 +573,13 @@
             document.getElementById('modal-img-preview').src = '';
         }
 
+        function resetFilters() {
+            document.getElementById('filter-unit').value = '';
+            document.getElementById('filter-nopol').value = '';
+            filterAndRender();
+        }
+
+        // Filter and Render Main Logic
         function filterAndRender() {
             const selectedUnit = document.getElementById('filter-unit').value;
             const searchNopol = document.getElementById('filter-nopol').value.trim().toLowerCase();
@@ -437,19 +592,23 @@
                 const link = mapsMap[selectedUnit.toLowerCase()];
                 if (link && (link.startsWith('http://') || link.startsWith('https://'))) {
                     mapsContainer.innerHTML = `
-                        <a href="${link}" target="_blank" class="w-full flex items-center justify-center gap-2 bg-rose-500 hover:bg-rose-600 active:bg-rose-700 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-rose-200 transition-all text-sm">
-                            <i class="fa-solid fa-location-arrow"></i> Buka Google Maps
+                        <a href="${link}" target="_blank" rel="noopener" class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 active:scale-95 text-white font-bold py-2.5 px-4 rounded-xl shadow-md shadow-rose-500/20 transition-all text-xs">
+                            <i class="fa-solid fa-location-arrow"></i> Buka Google Maps Lokasi
                         </a>
                     `;
                 } else {
                     mapsContainer.innerHTML = `
-                        <span class="block text-center text-sm text-amber-500 bg-amber-50 py-3 rounded-xl border border-dashed border-amber-200 font-medium">Link Maps tidak tersedia / tidak valid</span>
+                        <div class="text-center text-xs text-amber-700 bg-amber-50 py-2.5 px-3 rounded-xl border border-amber-200/60 font-medium">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Link Maps tidak tersedia / tidak valid
+                        </div>
                     `;
                 }
             } else {
                 unitLabel.textContent = '-';
                 mapsContainer.innerHTML = `
-                    <p class="block text-center text-sm text-slate-400 bg-slate-50 py-3 rounded-xl border border-dashed border-slate-200 font-medium">Silakan pilih "Unit Kerja" untuk melihat lokasi</p>
+                    <div class="text-center text-xs text-slate-400 bg-slate-50 py-2.5 px-3 rounded-xl border border-dashed border-slate-200 font-medium flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-circle-info"></i> Pilih "Unit Kerja" untuk link lokasi
+                    </div>
                 `;
             }
 
@@ -504,7 +663,7 @@
                 if (colD.includes('INNOVA')) innovaCount++;
             });
 
-            // Logika Tampilan Card Area
+            // Update Card Area
             const areaDisplay = document.getElementById('resume-area');
             const subBlockArea = document.getElementById('sub-block-area');
             const textSubArea = document.getElementById('text-sub-area');
@@ -547,51 +706,70 @@
             } else {
                 document.getElementById('empty-state').classList.add('hidden');
                 
-                filtered.forEach(row => {
+                filtered.forEach((row, rowIndex) => {
                     const tr = document.createElement('tr');
-                    tr.className = 'hover:bg-slate-50/80 transition-colors border-b border-slate-100';
+                    tr.className = 'hover:bg-blue-50/40 transition-colors border-b border-slate-100/80';
                     
                     // Render Kolom A s.d. K (Index 0 s.d. 10)
                     for(let i = 0; i < 11; i++) {
                         const td = document.createElement('td');
-                        td.className = 'px-6 py-4 whitespace-nowrap text-slate-700';
+                        td.className = 'px-5 py-3.5 whitespace-nowrap text-slate-700';
                         
+                        // Formatting Khusus Kolom NOPOL (Index 2)
                         if (i === 2) {
-                            td.innerHTML = `<span class="bg-slate-100 text-slate-800 font-mono font-bold px-2.5 py-1 rounded-md border border-slate-200 text-xs">${row[i]}</span>`;
-                        } else {
+                            td.innerHTML = `
+                                <span class="plate-tag bg-slate-900 text-amber-300 font-extrabold px-3 py-1 rounded-md border border-slate-700 text-xs shadow-xs inline-block">
+                                    ${row[i]}
+                                </span>`;
+                        } 
+                        // Formatting Khusus Status Sewa (Index 10)
+                        else if (i === 10) {
+                            const val = row[i] ? row[i].toString().toUpperCase() : '';
+                            if (val.includes('MASIH SEWA')) {
+                                td.innerHTML = `<span class="bg-emerald-100 text-emerald-800 border border-emerald-300/80 text-[11px] font-extrabold px-2.5 py-1 rounded-full inline-flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i> MASIH SEWA</span>`;
+                            } else if (val.includes('HABIS SEWA')) {
+                                td.innerHTML = `<span class="bg-rose-100 text-rose-800 border border-rose-300/80 text-[11px] font-extrabold px-2.5 py-1 rounded-full inline-flex items-center gap-1.5"><i class="fa-solid fa-circle-xmark text-rose-600 text-[10px]"></i> HABIS SEWA</span>`;
+                            } else {
+                                td.textContent = row[i];
+                            }
+                        }
+                        else {
                             td.textContent = row[i];
                         }
                         tr.appendChild(td);
                     }
 
                     // Render Kolom M s.d. Q (Index 12 s.d. 16)
-                    // Index 12: TANGGAL PRESENSI (Kolom M)
+                    // Index 12: TANGGAL PRESENSI
                     const tdM = document.createElement('td');
-                    tdM.className = 'px-6 py-4 whitespace-nowrap text-slate-700';
+                    tdM.className = 'px-5 py-3.5 whitespace-nowrap text-slate-700 font-semibold text-xs';
                     tdM.textContent = row[12] ? row[12].toString() : '-';
                     tr.appendChild(tdM);
 
-                    // Index 13: KILOMETER (Kolom N)
+                    // Index 13: KILOMETER
                     const tdN = document.createElement('td');
-                    tdN.className = 'px-6 py-4 whitespace-nowrap text-slate-700 font-mono';
+                    tdN.className = 'px-5 py-3.5 whitespace-nowrap text-slate-800 font-bold font-mono text-xs';
                     tdN.textContent = row[13] ? row[13].toString() : '-';
                     tr.appendChild(tdN);
 
-                    // Index 14-16: TAMPAK DEPAN, TAMPAK BELAKANG, STNK (Kolom O, P, Q)
+                    // Index 14-16: TAMPAK DEPAN, TAMPAK BELAKANG, STNK
                     for (let imgIdx = 14; imgIdx <= 16; imgIdx++) {
                         const tdImg = document.createElement('td');
-                        tdImg.className = 'px-6 py-4 whitespace-nowrap';
+                        tdImg.className = 'px-5 py-3 whitespace-nowrap';
                         const rawUrl = row[imgIdx] ? row[imgIdx].toString().trim() : '';
                         
                         if (rawUrl && (rawUrl.startsWith('http://') || rawUrl.startsWith('https://'))) {
                             const formattedUrl = formatImageUrl(rawUrl);
                             tdImg.innerHTML = `
-                                <div class="w-14 h-14 rounded-lg overflow-hidden border border-slate-200 shadow-sm bg-slate-100 cursor-pointer hover:opacity-80 transition-all hover:scale-105 transform" onclick="openImageModal('${formattedUrl}')">
-                                    <img src="${formattedUrl}" alt="Preview" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-[10px] text-slate-400 p-1 block text-center\\'>Gambar Error</span>';">
+                                <div class="relative group w-12 h-12 rounded-xl overflow-hidden border border-slate-200 shadow-xs bg-slate-100 cursor-pointer hover:border-blue-500 hover:shadow-md transition-all" onclick="openImageModal('${formattedUrl}')">
+                                    <img src="${formattedUrl}" alt="Thumbnail" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-[9px] text-slate-400 p-1 block text-center mt-2\\'>Error</span>';">
+                                    <div class="absolute inset-0 bg-blue-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs">
+                                        <i class="fa-solid fa-magnifying-glass-plus"></i>
+                                    </div>
                                 </div>
                             `;
                         } else {
-                            tdImg.innerHTML = `<span class="text-xs text-slate-400 italic">-</span>`;
+                            tdImg.innerHTML = `<span class="text-xs text-slate-400 font-normal italic">-</span>`;
                         }
                         tr.appendChild(tdImg);
                     }
@@ -606,6 +784,7 @@
             }, 50);
         }
 
+        // Initialize Fetch on Page Load
         window.addEventListener('DOMContentLoaded', () => {
             fetchSheetDataJSONP('OPERATOR', 'handleOperatorData');
             fetchSheetDataJSONP('DETAIL', 'handleDetailData');
