@@ -529,20 +529,19 @@
         <!-- ================= TAB 4: SERVIS RUTIN ================= -->
         <div id="content-tab4" class="space-y-6 hidden">
             
-            <!-- Section Header Info Servis Rutin (F2, G2, H2) -->
+            <!-- Section Header Info Servis Rutin (F2: Judul, G2: Keterangan, H2: Link Form Catatan Teknisi Bengkel) -->
             <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-2 flex-wrap mb-1">
                         <span class="bg-blue-100 text-blue-800 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">Layanan Servis Rutin</span>
-                        <!-- Periode dari F2 -->
-                        <p id="servis-periode" class="text-xs font-bold text-slate-500">-</p>
                     </div>
-                    <h2 class="text-lg font-extrabold text-slate-900 mt-1">SERVIS RUTIN KENDARAAN</h2>
-                    <!-- Keterangan dari G2 -->
+                    <!-- Judul Utama (F2) -->
+                    <h2 id="servis-title" class="text-lg font-extrabold text-slate-900 mt-1">SERVIS RUTIN KENDARAAN</h2>
+                    <!-- KETERANGAN (G2) -->
                     <p id="servis-desc" class="text-xs text-slate-500 font-medium mt-0.5 max-w-2xl">-</p>
                 </div>
                 
-                <!-- Link Form Catatan Teknisi Bengkel dari H2 -->
+                <!-- FORM CATATAN TEKNISI BENGKEL (H2) -->
                 <div id="servis-link-container" class="shrink-0">
                     <a id="servis-link-btn" href="#" target="_blank" rel="noopener" class="hidden inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl shadow-md transition-all active:scale-95">
                         <i class="fa-solid fa-clipboard-list"></i> Form Catatan Teknisi Bengkel
@@ -603,7 +602,7 @@
                 </div>
             </div>
 
-            <!-- Filter Servis Rutin (Unit Kerja & Tanggal DITUKAR POSISI) -->
+            <!-- Filter Servis Rutin -->
             <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm space-y-4">
                 <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                     <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
@@ -702,7 +701,10 @@
         let rawPengaduanData = [];
         let rawMonitoringData = [];
         let rawServisRutinData = [];
-        let servisHeaderMetadata = { periode: '', desc: '', formLink: '' };
+        
+        // Metadata Header Tab Servis Rutin (F2: Judul, G2: Keterangan, H2: Form Link)
+        let servisHeaderMetadata = { title: '', desc: '', formLink: '' };
+        
         let mapsMap = {}; 
         let loadedSheets = 0;
 
@@ -870,9 +872,12 @@
 
             if (rows.length > 0) {
                 const r0 = rows[0].c;
-                servisHeaderMetadata.periode = (r0 && r0[5]) ? (r0[5].f || r0[5].v || '') : '';  // F2 (Index 5) -> Periode
-                servisHeaderMetadata.desc = (r0 && r0[6]) ? (r0[6].f || r0[6].v || '') : '';     // G2 (Index 6) -> Keterangan Header
-                servisHeaderMetadata.formLink = (r0 && r0[7]) ? (r0[7].f || r0[7].v || '') : ''; // H2 (Index 7) -> Link Form Teknisi
+                // F2 (Index 5) -> Judul Servis Rutin
+                servisHeaderMetadata.title = (r0 && r0[5]) ? (r0[5].f || r0[5].v || '') : '';
+                // G2 (Index 6) -> Keterangan Header
+                servisHeaderMetadata.desc = (r0 && r0[6]) ? (r0[6].f || r0[6].v || '') : '';
+                // H2 (Index 7) -> Form Catatan Teknisi Bengkel (Link)
+                servisHeaderMetadata.formLink = (r0 && r0[7]) ? (r0[7].f || r0[7].v || '') : '';
             }
 
             rawServisRutinData = rows.slice(1).map(row => {
@@ -1227,12 +1232,23 @@
 
         // ================= RENDER TAB 4 (SERVIS RUTIN) =================
         function renderTab4() {
-            if (servisHeaderMetadata.periode) {
-                document.getElementById('servis-periode').textContent = servisHeaderMetadata.periode;
+            // Render Judul Utama (F2)
+            const titleEl = document.getElementById('servis-title');
+            if (servisHeaderMetadata.title) {
+                titleEl.textContent = servisHeaderMetadata.title;
+            } else {
+                titleEl.textContent = 'SERVIS RUTIN KENDARAAN';
             }
+
+            // Render Keterangan (G2)
+            const descEl = document.getElementById('servis-desc');
             if (servisHeaderMetadata.desc) {
-                document.getElementById('servis-desc').textContent = servisHeaderMetadata.desc;
+                descEl.textContent = servisHeaderMetadata.desc;
+            } else {
+                descEl.textContent = '-';
             }
+
+            // Render Form Catatan Teknisi Bengkel Link (H2)
             const btnLink = document.getElementById('servis-link-btn');
             if (servisHeaderMetadata.formLink && (servisHeaderMetadata.formLink.startsWith('http://') || servisHeaderMetadata.formLink.startsWith('https://'))) {
                 btnLink.href = servisHeaderMetadata.formLink;
