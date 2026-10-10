@@ -63,51 +63,51 @@
 </head>
 <body class="text-slate-800 antialiased min-h-screen flex flex-col selection:bg-blue-500 selection:text-white">
 
-    <!-- Top Header Navigation -->
-    <header class="bg-pnm-gradient text-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <!-- Top Header Navigation (Compact Header) -->
+    <header class="bg-pnm-gradient text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5">
                 
-                <!-- Logo & Title Section (Logo Bebas Tanpa Terbatas Kotak) -->
-                <div class="flex items-center gap-3.5">
+                <!-- Logo & Title Section (Logo diperkecil menjadi h-12 sm:h-14 agar compact) -->
+                <div class="flex items-center gap-3">
                     <div class="shrink-0 flex items-center justify-center">
-                        <img id="app-logo-img" src="" alt="Logo PNM" class="h-12 w-auto object-contain transition-all hover:scale-105">
+                        <img id="app-logo-img" src="" alt="Logo PNM" class="h-12 sm:h-14 w-auto object-contain transition-all hover:scale-105">
                     </div>
                     <div>
                         <div class="flex items-center gap-2">
-                            <span class="bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider">PT PNM</span>
-                            <span class="text-xs text-blue-200 font-medium tracking-wide">CABANG YOGYAKARTA</span>
+                            <span class="bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 text-[9px] font-extrabold px-1.5 py-0.2 rounded-full uppercase tracking-wider">PT PNM</span>
+                            <span class="text-[11px] text-blue-200 font-medium tracking-wide">CABANG YOGYAKARTA</span>
                         </div>
-                        <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white leading-tight">DASHBOARD KENDARAAN MBM</h1>
+                        <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-white leading-tight">DASHBOARD KENDARAAN MBM</h1>
                     </div>
                 </div>
 
                 <!-- Contact Operator (WhatsApp) -->
-                <div class="flex items-center gap-3 self-end md:self-auto">
+                <div class="flex items-center gap-2 self-end md:self-auto">
                     <a href="https://wa.me/6285643782103" target="_blank" rel="noopener"
-                       class="group flex items-center gap-3 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white px-4 py-2 rounded-full shadow-lg shadow-emerald-900/20 border border-emerald-400/40 transition-all duration-300">
-                        <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white group-hover:scale-110 transition-transform">
-                            <i class="fa-brands fa-whatsapp text-lg"></i>
+                       class="group flex items-center gap-2.5 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white px-3 py-1.5 rounded-full shadow-md shadow-emerald-900/20 border border-emerald-400/40 transition-all duration-300">
+                        <div class="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-white group-hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-whatsapp text-sm"></i>
                         </div>
                         <div class="text-left pr-1">
-                            <p class="text-[10px] font-extrabold tracking-wider text-emerald-100 uppercase leading-none">HUBUNGI OPERATOR</p>
-                            <p class="text-xs font-bold text-white mt-0.5">RAFLI <span class="opacity-80 font-normal">| RO MBM</span></p>
+                            <p class="text-[9px] font-extrabold tracking-wider text-emerald-100 uppercase leading-none">Hubungi RO MBM</p>
+                            <p class="text-xs font-bold text-white mt-0.5"> MUHAMMAD RAFLI <span class="opacity-80 font-normal"></span></p>
                         </div>
-                        <i class="fa-solid fa-chevron-right text-xs opacity-60 group-hover:translate-x-1 transition-transform ml-1"></i>
+                        <i class="fa-solid fa-chevron-right text-[10px] opacity-60 group-hover:translate-x-1 transition-transform ml-0.5"></i>
                     </a>
                 </div>
 
             </div>
 
-            <!-- Tab Navigation Control Bar -->
-            <div class="mt-4 pt-3 border-t border-white/10 flex items-center gap-2 overflow-x-auto custom-scrollbar">
-                <button onclick="switchTab('tab1')" id="btn-tab1" class="tab-btn active px-5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 text-white hover:bg-white/10 shrink-0 cursor-pointer">
+            <!-- Tab Navigation Control Bar (Compact padding & margin) -->
+            <div class="mt-2 pt-2 border-t border-white/10 flex items-center gap-2 overflow-x-auto custom-scrollbar">
+                <button onclick="switchTab('tab1')" id="btn-tab1" class="tab-btn active px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 text-white hover:bg-white/10 shrink-0 cursor-pointer">
                     <i class="fa-solid fa-car"></i> DATA KENDARAAN
                 </button>
-                <button onclick="switchTab('tab2')" id="btn-tab2" class="tab-btn px-5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 text-white hover:bg-white/10 shrink-0 cursor-pointer">
+                <button onclick="switchTab('tab2')" id="btn-tab2" class="tab-btn px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 text-white hover:bg-white/10 shrink-0 cursor-pointer">
                     <i class="fa-solid fa-triangle-exclamation"></i> PENGADUAN
                 </button>
-                <button onclick="switchTab('tab3')" id="btn-tab3" class="tab-btn px-5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 text-white hover:bg-white/10 shrink-0 cursor-pointer">
+                <button onclick="switchTab('tab3')" id="btn-tab3" class="tab-btn px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 text-white hover:bg-white/10 shrink-0 cursor-pointer">
                     <i class="fa-solid fa-chart-line"></i> MONITORING
                 </button>
             </div>
@@ -118,15 +118,15 @@
     <!-- Main Content Area -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 flex-grow w-full">
 
-        <!-- Global Loading Overlay -->
+        <!-- Global Loading Overlay (Logo Drive Pada Saat Loading) -->
         <div id="loading" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] flex flex-col items-center justify-center text-white gap-4 transition-all">
             <div class="relative flex items-center justify-center">
-                <div class="w-16 h-16 border-4 border-emerald-400/30 border-t-emerald-400 rounded-full animate-spin"></div>
-                <i class="fa-solid fa-shield-halved absolute text-emerald-400 text-lg"></i>
+                <div class="w-20 h-20 border-4 border-emerald-400/35 border-t-emerald-400 rounded-full animate-spin"></div>
+                <img id="loading-logo-img" src="" alt="Logo Loading" class="absolute w-10 h-10 object-contain">
             </div>
             <div class="text-center">
-                <p class="font-bold text-lg tracking-wide">Memuat Data Dashboard...</p>
-                <p class="text-xs text-slate-300 font-medium mt-1">Mengambil data realtime dari Google Sheets</p>
+                <p class="font-bold text-lg tracking-wide">Mohon Tunggu Sebentar</p>
+                <p class="text-xs text-slate-300 font-medium mt-1">Loading...</p>
             </div>
         </div>
 
@@ -185,8 +185,8 @@
                                 <i class="fa-solid fa-map-location-dot text-sm"></i>
                             </div>
                             <div>
-                                <h2 class="font-bold text-slate-900 text-sm">Informasi Lokasi Unit</h2>
-                                <p class="text-[11px] text-slate-400 font-medium">Navigasi Google Maps</p>
+                                <h2 class="font-bold text-slate-900 text-sm">Lokasi Unit</h2>
+                                <p class="text-[11px] text-slate-400 font-medium">Link Google Maps</p>
                             </div>
                         </div>
                         
@@ -235,7 +235,7 @@
                     <div>
                         <div class="flex items-start justify-between">
                             <div>
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-100">Armada Roda Dua</span>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-100">Roda Dua</span>
                                 <div class="flex items-baseline gap-2 mt-1">
                                     <span id="resume-motor" class="text-3xl font-black text-slate-900">0</span>
                                     <span class="text-xs font-bold text-slate-400">Unit Motor</span>
@@ -263,7 +263,7 @@
                     <div>
                         <div class="flex items-start justify-between">
                             <div>
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">Armada Roda Empat</span>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">Roda Empat</span>
                                 <div class="flex items-baseline gap-2 mt-1">
                                     <span id="resume-mobil" class="text-3xl font-black text-slate-900">0</span>
                                     <span class="text-xs font-bold text-slate-400">Unit Mobil</span>
@@ -292,7 +292,7 @@
                 <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm space-y-3">
                     <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
                         <p class="text-xs font-extrabold text-slate-700 uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-motorcycle text-amber-500"></i> Breakdown Tipe Motor
+                            <i class="fa-solid fa-motorcycle text-amber-500"></i> Tipe Motor
                         </p>
                         <span class="text-[10px] font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded">Roda 2</span>
                     </div>
@@ -315,7 +315,7 @@
                 <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm space-y-3">
                     <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
                         <p class="text-xs font-extrabold text-slate-700 uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-car-side text-indigo-600"></i> Breakdown Tipe Mobil
+                            <i class="fa-solid fa-car-side text-indigo-600"></i> Tipe Mobil
                         </p>
                         <span class="text-[10px] font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded">Roda 4</span>
                     </div>
@@ -341,7 +341,7 @@
                         </div>
                         <div>
                             <h2 class="font-extrabold text-slate-900 text-base leading-snug">Detail Informasi Kendaraan Operasional</h2>
-                            <p class="text-xs text-slate-400 font-medium">Data realtime kendaraan berdasarkan filter</p>
+                            <p class="text-xs text-slate-400 font-medium">Data kendaraan berdasarkan filter</p>
                         </div>
                     </div>
                     <div>
@@ -446,7 +446,7 @@
                 <div class="p-4 border-b border-slate-100 bg-slate-50/50">
                     <h2 class="font-extrabold text-slate-900 text-sm">DAFTAR LIST PENGADUAN</h2>
                 </div>
-                <div class="overflow-x-auto custom-scrollbar">
+                <div id="pengaduan-table-container" class="overflow-x-auto custom-scrollbar">
                     <table class="w-full text-left border-collapse min-w-max">
                         <thead>
                             <tr class="bg-slate-900 text-white text-xs font-extrabold uppercase tracking-wider">
@@ -504,7 +504,7 @@
                 <div class="p-4 border-b border-slate-100 bg-slate-50/50">
                     <h2 class="font-extrabold text-slate-900 text-sm">DATA MONITORING KENDARAAN</h2>
                 </div>
-                <div class="overflow-x-auto custom-scrollbar">
+                <div id="monitoring-table-container" class="overflow-x-auto custom-scrollbar">
                     <table class="w-full text-left border-collapse min-w-max">
                         <thead>
                             <tr class="bg-slate-900 text-white text-xs font-extrabold uppercase tracking-wider">
@@ -543,8 +543,8 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200/80 mt-12 py-6 text-center text-xs font-semibold text-slate-400">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p>&copy; 2026 PT Permodalan Nasional Madani (PNM) Cabang Yogyakarta.</p>
-            <p class="text-slate-400">Dashboard Kendaraan MBM &bull; Integrated Single Page System</p>
+            <p>&copy; PT MBM (PNM) Cabang Yogyakarta.</p>
+            <p class="text-slate-400">Dashboard Kendaraan MBM &bull; RO MBM Muhammad Rafli Rizky Fallah</p>
         </div>
     </footer>
 
@@ -555,8 +555,10 @@
         // ID Logo Google Drive Terbaru
         const LOGO_DRIVE_ID = '1wUe07_smJozssccF-BiUwm8O-TQy3aIt'; 
 
-        // Apply Logo URL
-        document.getElementById('app-logo-img').src = `https://drive.google.com/thumbnail?id=${LOGO_DRIVE_ID}&sz=w500`;
+        // Apply Logo URL to Header and Loading Overlay
+        const logoUrl = `https://drive.google.com/thumbnail?id=${LOGO_DRIVE_ID}&sz=w500`;
+        document.getElementById('app-logo-img').src = logoUrl;
+        document.getElementById('loading-logo-img').src = logoUrl;
 
         // GLOBAL DATA STORAGE
         let rawDetailData = [];
@@ -566,6 +568,56 @@
         let loadedSheets = 0;
 
         const additionalHeadersTab1 = ["TANGGAL PRESENSI", "KILOMETER", "TAMPAK DEPAN", "TAMPAK BELAKANG", "STNK"];
+
+        // Setup Double Scrollbar (Top and Bottom) for all tables
+        function setupDoubleScrollbar(tableContainerId) {
+            const container = document.getElementById(tableContainerId);
+            if (!container) return;
+
+            // Check if top scrollbar already created
+            if (container.previousElementSibling && container.previousElementSibling.classList.contains('top-scrollbar-wrapper')) {
+                const inner = container.previousElementSibling.querySelector('div');
+                const table = container.querySelector('table');
+                if (inner && table) {
+                    inner.style.width = table.scrollWidth + 'px';
+                }
+                return;
+            }
+
+            const table = container.querySelector('table');
+            if (!table) return;
+
+            const topScroll = document.createElement('div');
+            topScroll.className = 'top-scrollbar-wrapper overflow-x-auto custom-scrollbar w-full';
+            const topScrollInner = document.createElement('div');
+            topScrollInner.style.width = table.scrollWidth + 'px';
+            topScrollInner.style.height = '1px';
+            topScroll.appendChild(topScrollInner);
+
+            container.parentNode.insertBefore(topScroll, container);
+
+            let isSyncing = false;
+            topScroll.addEventListener('scroll', () => {
+                if (!isSyncing) {
+                    isSyncing = true;
+                    container.scrollLeft = topScroll.scrollLeft;
+                }
+                isSyncing = false;
+            });
+
+            container.addEventListener('scroll', () => {
+                if (!isSyncing) {
+                    isSyncing = true;
+                    topScroll.scrollLeft = container.scrollLeft;
+                }
+                isSyncing = false;
+            });
+
+            const observer = new ResizeObserver(() => {
+                topScrollInner.style.width = table.scrollWidth + 'px';
+            });
+            observer.observe(table);
+        }
 
         // Dynamic JSONP Fetcher
         function fetchSheetDataJSONP(sheetName, callbackName) {
@@ -707,6 +759,13 @@
             document.getElementById('content-tab3').classList.add('hidden');
 
             document.getElementById('content-' + tabId).classList.remove('hidden');
+
+            // Refresh double scrollbar widths on tab change
+            setTimeout(() => {
+                setupDoubleScrollbar('main-table-container');
+                setupDoubleScrollbar('pengaduan-table-container');
+                setupDoubleScrollbar('monitoring-table-container');
+            }, 50);
         }
 
         // IMAGE FORMATTER & MODAL
@@ -862,6 +921,7 @@
                     tbody.appendChild(tr);
                 });
             }
+            setupDoubleScrollbar('main-table-container');
         }
 
         function resetFiltersTab1() {
@@ -929,6 +989,7 @@
                     tbody.appendChild(tr);
                 });
             }
+            setupDoubleScrollbar('pengaduan-table-container');
         }
 
         function resetFiltersTab2() {
@@ -984,6 +1045,7 @@
                     tbody.appendChild(tr);
                 });
             }
+            setupDoubleScrollbar('monitoring-table-container');
         }
 
         function resetFiltersTab3() {
