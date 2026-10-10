@@ -68,7 +68,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5">
                 
-                <!-- Logo & Title Section (Logo diperkecil menjadi h-12 sm:h-14 agar compact) -->
+                <!-- Logo & Title Section -->
                 <div class="flex items-center gap-3">
                     <div class="shrink-0 flex items-center justify-center">
                         <img id="app-logo-img" src="" alt="Logo PNM" class="h-12 sm:h-14 w-auto object-contain transition-all hover:scale-105">
@@ -99,16 +99,19 @@
 
             </div>
 
-            <!-- Tab Navigation Control Bar (Compact padding & margin) -->
+            <!-- Tab Navigation Control Bar -->
             <div class="mt-2 pt-2 border-t border-white/10 flex items-center gap-2 overflow-x-auto custom-scrollbar">
                 <button onclick="switchTab('tab1')" id="btn-tab1" class="tab-btn active px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 text-white hover:bg-white/10 shrink-0 cursor-pointer">
                     <i class="fa-solid fa-car"></i> DATA KENDARAAN
                 </button>
+                <button onclick="switchTab('tab3')" id="btn-tab3" class="tab-btn px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 text-white hover:bg-white/10 shrink-0 cursor-pointer">
+                    <i class="fa-solid fa-chart-line"></i> MONITORING
+                </button>
                 <button onclick="switchTab('tab2')" id="btn-tab2" class="tab-btn px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 text-white hover:bg-white/10 shrink-0 cursor-pointer">
                     <i class="fa-solid fa-triangle-exclamation"></i> PENGADUAN
                 </button>
-                <button onclick="switchTab('tab3')" id="btn-tab3" class="tab-btn px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 text-white hover:bg-white/10 shrink-0 cursor-pointer">
-                    <i class="fa-solid fa-chart-line"></i> MONITORING
+                <button onclick="switchTab('tab4')" id="btn-tab4" class="tab-btn px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 text-white hover:bg-white/10 shrink-0 cursor-pointer">
+                    <i class="fa-solid fa-wrench"></i> SERVIS RUTIN
                 </button>
             </div>
 
@@ -118,7 +121,7 @@
     <!-- Main Content Area -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 flex-grow w-full">
 
-        <!-- Global Loading Overlay (Logo Drive Pada Saat Loading) -->
+        <!-- Global Loading Overlay -->
         <div id="loading" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] flex flex-col items-center justify-center text-white gap-4 transition-all">
             <div class="relative flex items-center justify-center">
                 <div class="w-20 h-20 border-4 border-emerald-400/35 border-t-emerald-400 rounded-full animate-spin"></div>
@@ -368,6 +371,62 @@
 
         </div>
 
+        <!-- ================= TAB 3: MONITORING ================= -->
+        <div id="content-tab3" class="space-y-6 hidden">
+            
+            <!-- Filters Monitoring -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                    <h2 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-filter text-emerald-600"></i> Filter Data Monitoring
+                    </h2>
+                    <button onclick="resetFiltersTab3()" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1 cursor-pointer">
+                        <i class="fa-solid fa-rotate-left text-[10px]"></i> Reset
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="text-[11px] font-bold text-slate-500 uppercase">Mulai Tanggal</label>
+                        <input type="date" id="filter-mon-start" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl px-3 py-2 mt-1">
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-bold text-slate-500 uppercase">Sampai Tanggal</label>
+                        <input type="date" id="filter-mon-end" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl px-3 py-2 mt-1">
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-bold text-slate-500 uppercase">Unit Kerja</label>
+                        <select id="filter-mon-unit" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl px-3 py-2 mt-1">
+                            <option value="">-- Semua Unit --</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabel Monitoring -->
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-md overflow-hidden">
+                <div class="p-4 border-b border-slate-100 bg-slate-50/50">
+                    <h2 class="font-extrabold text-slate-900 text-sm">DATA MONITORING KENDARAAN</h2>
+                </div>
+                <div id="monitoring-table-container" class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left border-collapse min-w-max">
+                        <thead>
+                            <tr class="bg-slate-900 text-white text-xs font-extrabold uppercase tracking-wider">
+                                <th class="px-4 py-3">TANGGAL</th>
+                                <th class="px-4 py-3">UNIT KERJA</th>
+                                <th class="px-4 py-3">AKTIVITAS</th>
+                                <th class="px-4 py-3">TEMUAN</th>
+                                <th class="px-4 py-3">PHOTO MONITORING</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body-tab3" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
+                    </table>
+                </div>
+                <div id="empty-state-tab3" class="hidden py-12 text-center text-slate-400 font-bold">Tidak ada data monitoring yang sesuai filter</div>
+            </div>
+
+        </div>
+
         <!-- ================= TAB 2: PENGADUAN ================= -->
         <div id="content-tab2" class="space-y-6 hidden">
             
@@ -467,65 +526,143 @@
 
         </div>
 
-        <!-- ================= TAB 3: MONITORING ================= -->
-        <div id="content-tab3" class="space-y-6 hidden">
+        <!-- ================= TAB 4: SERVIS RUTIN ================= -->
+        <div id="content-tab4" class="space-y-6 hidden">
             
-            <!-- Filters Monitoring -->
+            <!-- Section Header Info Servis Rutin (F2, G2, H2) -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="bg-blue-100 text-blue-800 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">Layanan Servis Rutin</span>
+                        <!-- Periode dari F2 -->
+                        <p id="servis-periode" class="text-xs font-bold text-slate-500">-</p>
+                    </div>
+                    <h2 class="text-lg font-extrabold text-slate-900 mt-1">SERVIS RUTIN KENDARAAN</h2>
+                    <!-- Keterangan dari G2 -->
+                    <p id="servis-desc" class="text-xs text-slate-500 font-medium mt-0.5 max-w-2xl">-</p>
+                </div>
+                
+                <!-- Link Form Catatan Teknisi Bengkel dari H2 -->
+                <div id="servis-link-container" class="shrink-0">
+                    <a id="servis-link-btn" href="#" target="_blank" rel="noopener" class="hidden inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl shadow-md transition-all active:scale-95">
+                        <i class="fa-solid fa-clipboard-list"></i> Form Catatan Teknisi Bengkel
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card Status Total, Done, Proses, Reschedule & % Sukses -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">TOTAL SERVIS</p>
+                        <h3 id="card-servis-total" class="text-2xl font-black text-slate-900 mt-1">0</h3>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-base font-bold">
+                        <i class="fa-solid fa-wrench"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] font-extrabold text-emerald-600 uppercase tracking-wider">DONE</p>
+                        <h3 id="card-servis-done" class="text-2xl font-black text-emerald-600 mt-1">0</h3>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-base font-bold">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] font-extrabold text-amber-600 uppercase tracking-wider">PROSES</p>
+                        <h3 id="card-servis-proses" class="text-2xl font-black text-amber-600 mt-1">0</h3>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-base font-bold">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] font-extrabold text-rose-600 uppercase tracking-wider">RESCHEDULE</p>
+                        <h3 id="card-servis-reschedule" class="text-2xl font-black text-rose-600 mt-1">0</h3>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-base font-bold">
+                        <i class="fa-solid fa-calendar-days"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm flex items-center justify-between col-span-2 sm:col-span-1">
+                    <div>
+                        <p class="text-[10px] font-extrabold text-indigo-600 uppercase tracking-wider">% SUKSES</p>
+                        <h3 id="card-servis-persen" class="text-2xl font-black text-indigo-600 mt-1">0%</h3>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-base font-bold">
+                        <i class="fa-solid fa-chart-pie"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Servis Rutin (Unit Kerja & Tanggal DITUKAR POSISI) -->
             <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm space-y-4">
                 <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                    <h2 class="font-bold text-slate-900 text-sm flex items-center gap-2">
-                        <i class="fa-solid fa-filter text-emerald-600"></i> Filter Data Monitoring
-                    </h2>
-                    <button onclick="resetFiltersTab3()" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1 cursor-pointer">
+                    <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-filter text-blue-600"></i> Filter Servis Rutin
+                    </h3>
+                    <button onclick="resetFiltersTab4()" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1 cursor-pointer">
                         <i class="fa-solid fa-rotate-left text-[10px]"></i> Reset
                     </button>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
+                        <label class="text-[11px] font-bold text-slate-500 uppercase">Unit Kerja</label>
+                        <div class="relative mt-1">
+                            <select id="filter-servis-unit" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl px-3 py-2.5 pl-9 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all cursor-pointer">
+                                <option value="">-- Semua Unit Kerja --</option>
+                            </select>
+                            <i class="fa-solid fa-building-user absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                            <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
+                        </div>
+                    </div>
+                    <div>
                         <label class="text-[11px] font-bold text-slate-500 uppercase">Mulai Tanggal</label>
-                        <input type="date" id="filter-mon-start" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl px-3 py-2 mt-1">
+                        <input type="date" id="filter-servis-start" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl px-3 py-2 mt-1">
                     </div>
                     <div>
                         <label class="text-[11px] font-bold text-slate-500 uppercase">Sampai Tanggal</label>
-                        <input type="date" id="filter-mon-end" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl px-3 py-2 mt-1">
-                    </div>
-                    <div>
-                        <label class="text-[11px] font-bold text-slate-500 uppercase">Unit Kerja</label>
-                        <select id="filter-mon-unit" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl px-3 py-2 mt-1">
-                            <option value="">-- Semua Unit --</option>
-                        </select>
+                        <input type="date" id="filter-servis-end" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl px-3 py-2 mt-1">
                     </div>
                 </div>
             </div>
 
-            <!-- Tabel Monitoring -->
+            <!-- Tabel Servis Rutin -->
             <div class="bg-white rounded-2xl border border-slate-200/80 shadow-md overflow-hidden">
-                <div class="p-4 border-b border-slate-100 bg-slate-50/50">
-                    <h2 class="font-extrabold text-slate-900 text-sm">DATA MONITORING KENDARAAN</h2>
+                <div class="p-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+                    <h2 class="font-extrabold text-slate-900 text-sm">DAFTAR JADWAL & REKAP SERVIS RUTIN</h2>
                 </div>
-                <div id="monitoring-table-container" class="overflow-x-auto custom-scrollbar">
+                <div id="servis-table-container" class="overflow-x-auto custom-scrollbar">
                     <table class="w-full text-left border-collapse min-w-max">
                         <thead>
                             <tr class="bg-slate-900 text-white text-xs font-extrabold uppercase tracking-wider">
-                                <th class="px-4 py-3">TANGGAL</th>
-                                <th class="px-4 py-3">UNIT KERJA</th>
-                                <th class="px-4 py-3">AKTIVITAS</th>
-                                <th class="px-4 py-3">TEMUAN</th>
-                                <th class="px-4 py-3">PHOTO MONITORING</th>
+                                <th class="px-4 py-3.5">UNIT KERJA</th>
+                                <th class="px-4 py-3.5">PLAN SERVIS</th>
+                                <th class="px-4 py-3.5">PROGRES</th>
+                                <th class="px-4 py-3.5 max-w-md">KETERANGAN</th>
+                                <th class="px-4 py-3.5 text-center">FOTO DOKUMENTASI</th>
                             </tr>
                         </thead>
-                        <tbody id="table-body-tab3" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
+                        <tbody id="table-body-tab4" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
                     </table>
                 </div>
-                <div id="empty-state-tab3" class="hidden py-12 text-center text-slate-400 font-bold">Tidak ada data monitoring yang sesuai filter</div>
+                <div id="empty-state-tab4" class="hidden py-12 text-center text-slate-400 font-bold">Tidak ada data servis rutin yang sesuai filter</div>
             </div>
 
         </div>
 
     </main>
 
-    <!-- Modal Image Preview (Semi Fullscreen Zoom) -->
+    <!-- Modal Image Preview -->
     <div id="image-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[100] hidden flex flex-col items-center justify-center p-4 transition-all" onclick="closeImageModal()">
         <div class="relative max-w-4xl max-h-[90vh] w-full flex flex-col items-center justify-center" onclick="event.stopPropagation()">
             <button onclick="closeImageModal()" class="absolute -top-12 right-0 text-white bg-white/10 hover:bg-white/20 p-2.5 rounded-full w-10 h-10 flex items-center justify-center transition-all cursor-pointer">
@@ -564,6 +701,8 @@
         let rawDetailData = [];
         let rawPengaduanData = [];
         let rawMonitoringData = [];
+        let rawServisRutinData = [];
+        let servisHeaderMetadata = { periode: '', desc: '', formLink: '' };
         let mapsMap = {}; 
         let loadedSheets = 0;
 
@@ -574,7 +713,6 @@
             const container = document.getElementById(tableContainerId);
             if (!container) return;
 
-            // Check if top scrollbar already created
             if (container.previousElementSibling && container.previousElementSibling.classList.contains('top-scrollbar-wrapper')) {
                 const inner = container.previousElementSibling.querySelector('div');
                 const table = container.querySelector('table');
@@ -633,6 +771,7 @@
             const dropdown1 = document.getElementById('filter-unit');
             const dropdown2 = document.getElementById('filter-aduan-unit');
             const dropdown3 = document.getElementById('filter-mon-unit');
+            const dropdown4 = document.getElementById('filter-servis-unit');
             
             rows.forEach(row => {
                 const unit = row.c[0] ? row.c[0].v : '';
@@ -645,10 +784,12 @@
                     const opt1 = new Option(unitName, unitName);
                     const opt2 = new Option(unitName, unitName);
                     const opt3 = new Option(unitName, unitName);
+                    const opt4 = new Option(unitName, unitName);
                     
                     dropdown1.add(opt1);
                     dropdown2.add(opt2);
                     dropdown3.add(opt3);
+                    dropdown4.add(opt4);
                 }
             });
             checkLoadStatus();
@@ -723,29 +864,60 @@
             checkLoadStatus();
         }
 
+        // --- CALLBACK 5: SERVIS RUTIN (TAB 4) ---
+        window.handleServisRutinData = function(json) {
+            const rows = json.table.rows || [];
+
+            if (rows.length > 0) {
+                const r0 = rows[0].c;
+                servisHeaderMetadata.periode = (r0 && r0[5]) ? (r0[5].f || r0[5].v || '') : '';  // F2 (Index 5) -> Periode
+                servisHeaderMetadata.desc = (r0 && r0[6]) ? (r0[6].f || r0[6].v || '') : '';     // G2 (Index 6) -> Keterangan Header
+                servisHeaderMetadata.formLink = (r0 && r0[7]) ? (r0[7].f || r0[7].v || '') : ''; // H2 (Index 7) -> Link Form Teknisi
+            }
+
+            rawServisRutinData = rows.slice(1).map(row => {
+                const getVal = (idx) => (row.c && row.c[idx]) ? (row.c[idx].f || row.c[idx].v || '') : '';
+                return {
+                    unitKerja: getVal(0),    // Kolom A (Index 0)
+                    tanggalServis: getVal(1),// Kolom B (Index 1)
+                    progres: getVal(2),      // Kolom C (Index 2)
+                    keterangan: getVal(3),   // Kolom D (Index 3)
+                    fotoDokumentasi: getVal(4) // Kolom E (Index 4)
+                };
+            });
+
+            checkLoadStatus();
+        }
+
         function checkLoadStatus() {
             loadedSheets++;
-            if (loadedSheets >= 4) {
+            if (loadedSheets >= 5) {
                 document.getElementById('loading').classList.add('hidden');
                 
                 // Bind Filters Tab 1
                 document.getElementById('filter-unit').addEventListener('change', renderTab1);
                 document.getElementById('filter-nopol').addEventListener('input', renderTab1);
 
-                // Bind Filters Tab 2
+                // Bind Filters Tab 2 (Pengaduan)
                 document.getElementById('filter-aduan-start').addEventListener('change', renderTab2);
                 document.getElementById('filter-aduan-end').addEventListener('change', renderTab2);
                 document.getElementById('filter-aduan-unit').addEventListener('change', renderTab2);
                 document.getElementById('filter-aduan-progres').addEventListener('change', renderTab2);
 
-                // Bind Filters Tab 3
+                // Bind Filters Tab 3 (Monitoring)
                 document.getElementById('filter-mon-start').addEventListener('change', renderTab3);
                 document.getElementById('filter-mon-end').addEventListener('change', renderTab3);
                 document.getElementById('filter-mon-unit').addEventListener('change', renderTab3);
 
+                // Bind Filters Tab 4 (Servis Rutin)
+                document.getElementById('filter-servis-start').addEventListener('change', renderTab4);
+                document.getElementById('filter-servis-end').addEventListener('change', renderTab4);
+                document.getElementById('filter-servis-unit').addEventListener('change', renderTab4);
+
                 renderTab1();
                 renderTab2();
                 renderTab3();
+                renderTab4();
             }
         }
 
@@ -757,14 +929,15 @@
             document.getElementById('content-tab1').classList.add('hidden');
             document.getElementById('content-tab2').classList.add('hidden');
             document.getElementById('content-tab3').classList.add('hidden');
+            document.getElementById('content-tab4').classList.add('hidden');
 
             document.getElementById('content-' + tabId).classList.remove('hidden');
 
-            // Refresh double scrollbar widths on tab change
             setTimeout(() => {
                 setupDoubleScrollbar('main-table-container');
                 setupDoubleScrollbar('pengaduan-table-container');
                 setupDoubleScrollbar('monitoring-table-container');
+                setupDoubleScrollbar('servis-table-container');
             }, 50);
         }
 
@@ -930,6 +1103,60 @@
             renderTab1();
         }
 
+        // ================= RENDER TAB 3 (MONITORING) =================
+        function renderTab3() {
+            const startDate = document.getElementById('filter-mon-start').value;
+            const endDate = document.getElementById('filter-mon-end').value;
+            const unit = document.getElementById('filter-mon-unit').value;
+
+            let filtered = [...rawMonitoringData];
+
+            if (startDate) filtered = filtered.filter(item => parseDate(item.tanggal) >= parseDate(startDate));
+            if (endDate) filtered = filtered.filter(item => parseDate(item.tanggal) <= parseDate(endDate) + 86400000);
+            if (unit) filtered = filtered.filter(item => item.unit.toLowerCase() === unit.toLowerCase());
+
+            filtered.sort((a, b) => parseDate(b.tanggal) - parseDate(a.tanggal));
+
+            const tbody = document.getElementById('table-body-tab3');
+            tbody.innerHTML = '';
+
+            if (filtered.length === 0) {
+                document.getElementById('empty-state-tab3').classList.remove('hidden');
+            } else {
+                document.getElementById('empty-state-tab3').classList.add('hidden');
+                filtered.forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50 border-b border-slate-100';
+
+                    let photoContent = '<span class="text-slate-400 italic">-</span>';
+                    if (item.photo && (item.photo.startsWith('http://') || item.photo.startsWith('https://'))) {
+                        const formattedUrl = formatImageUrl(item.photo);
+                        photoContent = `
+                            <div class="w-12 h-12 rounded-xl overflow-hidden border bg-slate-100 cursor-pointer hover:scale-105 transition-all" onclick="openImageModal('${formattedUrl}')">
+                                <img src="${formattedUrl}" class="w-full h-full object-cover">
+                            </div>`;
+                    }
+
+                    tr.innerHTML = `
+                        <td class="px-4 py-3 whitespace-nowrap font-semibold">${item.tanggal || '-'}</td>
+                        <td class="px-4 py-3 whitespace-nowrap font-bold">${item.unit || '-'}</td>
+                        <td class="px-4 py-3">${item.aktivitas || '-'}</td>
+                        <td class="px-4 py-3">${item.temuan || '-'}</td>
+                        <td class="px-4 py-3 whitespace-nowrap">${photoContent}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+            setupDoubleScrollbar('monitoring-table-container');
+        }
+
+        function resetFiltersTab3() {
+            document.getElementById('filter-mon-start').value = '';
+            document.getElementById('filter-mon-end').value = '';
+            document.getElementById('filter-mon-unit').value = '';
+            renderTab3();
+        }
+
         // ================= RENDER TAB 2 (PENGADUAN) =================
         function renderTab2() {
             const startDate = document.getElementById('filter-aduan-start').value;
@@ -944,10 +1171,8 @@
             if (unit) filtered = filtered.filter(item => item.unit.toLowerCase() === unit.toLowerCase());
             if (progres) filtered = filtered.filter(item => item.progres.toUpperCase() === progres.toUpperCase());
 
-            // Urutkan Tanggal Termuda ke Tertua
             filtered.sort((a, b) => parseDate(b.tanggal) - parseDate(a.tanggal));
 
-            // Resume Calculations
             let doneCount = filtered.filter(i => i.progres.toUpperCase() === 'DONE').length;
             let prosesCount = filtered.filter(i => i.progres.toUpperCase() === 'PROSES').length;
 
@@ -1000,59 +1225,115 @@
             renderTab2();
         }
 
-        // ================= RENDER TAB 3 (MONITORING) =================
-        function renderTab3() {
-            const startDate = document.getElementById('filter-mon-start').value;
-            const endDate = document.getElementById('filter-mon-end').value;
-            const unit = document.getElementById('filter-mon-unit').value;
+        // ================= RENDER TAB 4 (SERVIS RUTIN) =================
+        function renderTab4() {
+            if (servisHeaderMetadata.periode) {
+                document.getElementById('servis-periode').textContent = servisHeaderMetadata.periode;
+            }
+            if (servisHeaderMetadata.desc) {
+                document.getElementById('servis-desc').textContent = servisHeaderMetadata.desc;
+            }
+            const btnLink = document.getElementById('servis-link-btn');
+            if (servisHeaderMetadata.formLink && (servisHeaderMetadata.formLink.startsWith('http://') || servisHeaderMetadata.formLink.startsWith('https://'))) {
+                btnLink.href = servisHeaderMetadata.formLink;
+                btnLink.classList.remove('hidden');
+            } else {
+                btnLink.classList.add('hidden');
+            }
 
-            let filtered = [...rawMonitoringData];
+            const startDate = document.getElementById('filter-servis-start').value;
+            const endDate = document.getElementById('filter-servis-end').value;
+            const unit = document.getElementById('filter-servis-unit').value;
 
-            if (startDate) filtered = filtered.filter(item => parseDate(item.tanggal) >= parseDate(startDate));
-            if (endDate) filtered = filtered.filter(item => parseDate(item.tanggal) <= parseDate(endDate) + 86400000);
-            if (unit) filtered = filtered.filter(item => item.unit.toLowerCase() === unit.toLowerCase());
+            let filtered = [...rawServisRutinData];
 
-            // Urutkan Tanggal Termuda ke Tertua
-            filtered.sort((a, b) => parseDate(b.tanggal) - parseDate(a.tanggal));
+            if (startDate) filtered = filtered.filter(item => parseDate(item.tanggalServis) >= parseDate(startDate));
+            if (endDate) filtered = filtered.filter(item => parseDate(item.tanggalServis) <= parseDate(endDate) + 86400000);
+            if (unit) filtered = filtered.filter(item => item.unitKerja.toLowerCase() === unit.toLowerCase());
 
-            const tbody = document.getElementById('table-body-tab3');
+            // URUTKAN TABEL BERDASARKAN TANGGAL TERMUDA (Ascending / Paling Awal)
+            filtered.sort((a, b) => parseDate(a.tanggalServis) - parseDate(b.tanggalServis));
+
+            // Hitung Kartu Status & % Sukses
+            let total = filtered.length;
+            let done = 0, proses = 0, reschedule = 0;
+
+            filtered.forEach(item => {
+                const p = (item.progres || '').toUpperCase();
+                if (p.includes('DONE') || p.includes('SELESAI')) done++;
+                else if (p.includes('PROSES') || p.includes('JADWAL')) proses++;
+                else if (p.includes('RESCHEDULE') || p.includes('TUNDA')) reschedule++;
+            });
+
+            let successRate = total > 0 ? Math.round((done / total) * 100) : 0;
+
+            document.getElementById('card-servis-total').textContent = total;
+            document.getElementById('card-servis-done').textContent = done;
+            document.getElementById('card-servis-proses').textContent = proses;
+            document.getElementById('card-servis-reschedule').textContent = reschedule;
+            document.getElementById('card-servis-persen').textContent = successRate + '%';
+
+            const tbody = document.getElementById('table-body-tab4');
             tbody.innerHTML = '';
 
             if (filtered.length === 0) {
-                document.getElementById('empty-state-tab3').classList.remove('hidden');
+                document.getElementById('empty-state-tab4').classList.remove('hidden');
             } else {
-                document.getElementById('empty-state-tab3').classList.add('hidden');
+                document.getElementById('empty-state-tab4').classList.add('hidden');
+                
+                let lastDate = null;
+                let colorToggle = false;
+
                 filtered.forEach(item => {
+                    const currentDate = (item.tanggalServis || '').trim();
+                    if (currentDate !== lastDate) {
+                        colorToggle = !colorToggle;
+                        lastDate = currentDate;
+                    }
+
                     const tr = document.createElement('tr');
-                    tr.className = 'hover:bg-slate-50 border-b border-slate-100';
+                    const bgClass = colorToggle ? 'bg-white' : 'bg-slate-50/90 hover:bg-slate-100/70';
+                    tr.className = `${bgClass} border-b border-slate-100 transition-colors`;
 
                     let photoContent = '<span class="text-slate-400 italic">-</span>';
-                    if (item.photo && (item.photo.startsWith('http://') || item.photo.startsWith('https://'))) {
-                        const formattedUrl = formatImageUrl(item.photo);
+                    if (item.fotoDokumentasi && (item.fotoDokumentasi.startsWith('http://') || item.fotoDokumentasi.startsWith('https://'))) {
+                        const formattedUrl = formatImageUrl(item.fotoDokumentasi);
                         photoContent = `
-                            <div class="w-12 h-12 rounded-xl overflow-hidden border bg-slate-100 cursor-pointer hover:scale-105 transition-all" onclick="openImageModal('${formattedUrl}')">
-                                <img src="${formattedUrl}" class="w-full h-full object-cover">
+                            <div class="flex justify-center">
+                                <div class="w-12 h-12 rounded-xl overflow-hidden border bg-slate-100 cursor-pointer hover:scale-105 transition-all shadow-sm" onclick="openImageModal('${formattedUrl}')">
+                                    <img src="${formattedUrl}" class="w-full h-full object-cover">
+                                </div>
                             </div>`;
                     }
 
+                    let progresDisplay = item.progres || '-';
+                    const progUpper = (item.progres || '').toUpperCase();
+                    if (progUpper.includes('DONE') || progUpper.includes('SELESAI')) {
+                        progresDisplay = `<span class="bg-emerald-100 text-emerald-800 font-extrabold px-2.5 py-1 rounded-full text-[10px]"><i class="fa-solid fa-circle-check"></i> ${item.progres}</span>`;
+                    } else if (progUpper.includes('PROSES') || progUpper.includes('JADWAL')) {
+                        progresDisplay = `<span class="bg-amber-100 text-amber-800 font-extrabold px-2.5 py-1 rounded-full text-[10px]"><i class="fa-solid fa-clock"></i> ${item.progres}</span>`;
+                    } else if (progUpper.includes('RESCHEDULE') || progUpper.includes('TUNDA')) {
+                        progresDisplay = `<span class="bg-rose-100 text-rose-800 font-extrabold px-2.5 py-1 rounded-full text-[10px]"><i class="fa-solid fa-calendar-days"></i> ${item.progres}</span>`;
+                    }
+
                     tr.innerHTML = `
-                        <td class="px-4 py-3 whitespace-nowrap font-semibold">${item.tanggal || '-'}</td>
-                        <td class="px-4 py-3 whitespace-nowrap font-bold">${item.unit || '-'}</td>
-                        <td class="px-4 py-3">${item.aktivitas || '-'}</td>
-                        <td class="px-4 py-3">${item.temuan || '-'}</td>
-                        <td class="px-4 py-3 whitespace-nowrap">${photoContent}</td>
+                        <td class="px-4 py-3.5 whitespace-nowrap font-bold text-slate-800">${item.unitKerja || '-'}</td>
+                        <td class="px-4 py-3.5 whitespace-nowrap font-semibold text-slate-700">${item.tanggalServis || '-'}</td>
+                        <td class="px-4 py-3.5 whitespace-nowrap">${progresDisplay}</td>
+                        <td class="px-4 py-3.5 max-w-md break-words whitespace-normal leading-relaxed text-slate-800">${item.keterangan || '-'}</td>
+                        <td class="px-4 py-3.5 whitespace-nowrap text-center">${photoContent}</td>
                     `;
                     tbody.appendChild(tr);
                 });
             }
-            setupDoubleScrollbar('monitoring-table-container');
+            setupDoubleScrollbar('servis-table-container');
         }
 
-        function resetFiltersTab3() {
-            document.getElementById('filter-mon-start').value = '';
-            document.getElementById('filter-mon-end').value = '';
-            document.getElementById('filter-mon-unit').value = '';
-            renderTab3();
+        function resetFiltersTab4() {
+            document.getElementById('filter-servis-start').value = '';
+            document.getElementById('filter-servis-end').value = '';
+            document.getElementById('filter-servis-unit').value = '';
+            renderTab4();
         }
 
         // INITIALIZE APP
@@ -1061,6 +1342,7 @@
             fetchSheetDataJSONP('DETAIL', 'handleDetailData');
             fetchSheetDataJSONP('PENGADUAN', 'handlePengaduanData');
             fetchSheetDataJSONP('MONITORING', 'handleMonitoringData');
+            fetchSheetDataJSONP('SERVIS RUTIN', 'handleServisRutinData');
         });
     </script>
 </body>
