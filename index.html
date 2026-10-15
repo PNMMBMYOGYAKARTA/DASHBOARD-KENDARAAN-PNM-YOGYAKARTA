@@ -415,7 +415,7 @@
                                 <th class="px-4 py-3">TANGGAL</th>
                                 <th class="px-4 py-3">UNIT KERJA</th>
                                 <th class="px-4 py-3">AKTIVITAS</th>
-                                <th class="px-4 py-3">TEMUAN</th>
+                                <th class="px-4 py-3 max-w-xs md:max-w-sm">TEMUAN</th>
                                 <th class="px-4 py-3">PHOTO MONITORING</th>
                             </tr>
                         </thead>
@@ -1146,7 +1146,7 @@
                         <td class="px-4 py-3 whitespace-nowrap font-semibold">${item.tanggal || '-'}</td>
                         <td class="px-4 py-3 whitespace-nowrap font-bold">${item.unit || '-'}</td>
                         <td class="px-4 py-3">${item.aktivitas || '-'}</td>
-                        <td class="px-4 py-3">${item.temuan || '-'}</td>
+                        <td class="px-4 py-3 max-w-xs md:max-w-sm break-words whitespace-normal leading-relaxed text-slate-800 font-normal">${item.temuan || '-'}</td>
                         <td class="px-4 py-3 whitespace-nowrap">${photoContent}</td>
                     `;
                     tbody.appendChild(tr);
